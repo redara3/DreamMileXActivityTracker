@@ -3,6 +3,7 @@ import btoa from 'btoa';
 import nextConnect from 'next-connect';
 import middleware from '../../../middlewares/middleware';
 import _ from 'lodash';
+import { getUser } from '../../../lib/db';
 
 const clientId = process.env.FITBIT_CLIENT_ID;
 const clientSecret = process.env.FITBIT_CLIENT_SECRET;
@@ -38,10 +39,11 @@ const getaccessTokenFromCode = async (code, db) => {
   const authJson = await response.json(); //extract JSON from the http response
   console.log(authJson);
   currentToken = authJson.access_token;
-  getProfile(authJson.access_token, authJson.refresh_token, db);
+  const fitbit_id = authJson.user_id;
+  getProfile(authJson.access_token, authJson.refresh_token, fitbit_id, db);
 }
 
-const getProfile = async (accessToken, refreshToken, db) => {
+const getProfile = async (accessToken, refreshToken, fitbitId, db) => {
 
   let response = await fetch(`https://api.fitbit.com/1/user/-/profile.json`, {
     
@@ -52,10 +54,25 @@ const getProfile = async (accessToken, refreshToken, db) => {
   let userJson = await response.json(); //extract JSON from the http response
   userJson.user.access_token = accessToken;
   userJson.user.refresh_token = refreshToken;
-  db.collection("users").insertOne(userJson.user, function(err, res) {
+  userJson.user.fitbit_id = fitbitId;
+
+  await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/1.json`, {
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${accessToken}`
+    }
+  }).catch(e => e);
+
+  
+
+  db.collection("users").replaceOne({
+      
+    "user.fitbit_id": fitbitId,
+  }, userJson, { upsert: true }, function(err, res) {
     if (err) throw err;
-    console.log("1 document inserted");
+    console.log("1 document replaced");
   });
+
  response = await fetch(`https://api.fitbit.com/1/user/-/activities/distance/date/today/1m.json`, {
     
     headers: {
@@ -73,9 +90,9 @@ const getProfile = async (accessToken, refreshToken, db) => {
   });
   const stepsJson = await response.json(); //extract JSON from the http response
   const dbDocument = _.merge( userJson, distanceJson, stepsJson);
-  db.collection("data").insertOne(dbDocument, function(err, res) {
+  db.collection("data").replaceOne({"user.fitbit_id": fitbitId}, dbDocument, { upsert: true }, function(err, res) {
     if (err) throw err;
-    console.log("1 document inserted");
+    console.log("1 document replaced");
   });
 }
 

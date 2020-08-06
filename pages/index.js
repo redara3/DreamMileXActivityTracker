@@ -29,10 +29,6 @@ import Orders from '../components/Orders';
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function Index() {
-  const { data, error } = useSWR('/api/people', fetcher)
-
-  if (error) return <div>Failed to load</div>
-  if (!data) return <div>Loading...</div>
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -44,8 +40,15 @@ export default function Index() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const { data, error } = useSWR('/api/people', fetcher)
+
+  if (error) return <div>Failed to load</div>
+  if (!data) return <div>Loading...</div>
+
   return (
     <div className={classes.root}>
+      <a href='/api/user_google?type=revoke'>Revoke Access to Google</a>
+   
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
@@ -88,6 +91,13 @@ export default function Index() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
+        <a href='https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'>Login with Fitbit</a>
+       <br/>
+      <a href='/api/user_fitbit?type=revoke'>Revoke Access to Fitbit</a>
+       <br/>
+       <a href='https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_google&prompt=consent&response_type=code&client_id=22388002278-mk4alaek70jeh8qapqf9vnb7tec8uoo3.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read'>Login with Google</a>
+       <br/>
+       
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>

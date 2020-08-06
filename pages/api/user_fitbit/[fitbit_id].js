@@ -7,7 +7,7 @@ const handler = nextConnect();
 handler.use(middleware);
 
 handler.get(async (req, res) => {
-  const user = await getUser(req, req.query.fullName);
+  const user = await getUser(req, req.query.fitbit_id);
   res.send({ user });
 });
 

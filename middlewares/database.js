@@ -9,7 +9,7 @@ export async function setUpDb(db) {
   db
     .collection('data')
     .createIndex({ expireAt: -1 }, { expireAfterSeconds: 0 });
-  db.collection('users').createIndex({ email: 1 }, { unique: true });
+  db.collection('users').createIndex({ expireAt: -1 }, { expireAfterSeconds: 0 });
 }
 
 export default async function database(req, res, next) {
