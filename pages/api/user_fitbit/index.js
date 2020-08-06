@@ -45,17 +45,15 @@ const getaccessTokenFromCode = async (code, db) => {
 
 const getProfile = async (accessToken, refreshToken, fitbitId, db) => {
 
-  let response = await fetch(`https://api.fitbit.com/1/user/-/profile.json`, {
+  // let response = await fetch(`https://api.fitbit.com/1/user/-/profile.json`, {
     
-    headers: {
-      'Authorization': `Bearer ${accessToken}`
-    }
-  });
-  let userJson = await response.json(); //extract JSON from the http response
-  userJson.user.access_token = accessToken;
-  userJson.user.refresh_token = refreshToken;
-  userJson.user.fitbit_id = fitbitId;
-
+  //   headers: {
+  //     'Authorization': `Bearer ${accessToken}`
+  //   }
+  // });
+  // let userJson = await response.json(); //extract JSON from the http response
+  let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, fitbit_id: fitbitId}};
+  
   await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/1.json`, {
     method: "POST",
     headers: {
@@ -73,7 +71,7 @@ const getProfile = async (accessToken, refreshToken, fitbitId, db) => {
     console.log("1 document replaced");
   });
 
- response = await fetch(`https://api.fitbit.com/1/user/-/activities/distance/date/today/1m.json`, {
+ let response = await fetch(`https://api.fitbit.com/1/user/-/activities/distance/date/today/1m.json`, {
     
     headers: {
       'Authorization': `Bearer ${accessToken}`
