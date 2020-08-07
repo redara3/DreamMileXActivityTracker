@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Email from "@material-ui/icons/Email";
+import Person from "@material-ui/icons/Person";
 import People from "@material-ui/icons/People";
 // core components
 import Header from "../components/Header/Header.js";
@@ -30,6 +30,24 @@ export default function LoginPage(props) {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
+
+  const [name, setName] = useState('');
+  const [teamName, setTeamName] = useState('');
+  function onSubmit(event) {
+    event.preventDefault();
+    console.log(name);
+    console.log(teamName);
+    const state = JSON.stringify({name:name, teamName: teamName})
+    window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
+  }
+  function handleTeamChange(event) {
+    event.preventDefault();
+    setTeamName(event.target.value)
+  } 
+  function handleNameChange(event) {
+    event.preventDefault();
+    setName(event.target.value)
+  }
   const { ...rest } = props;
   return (
     <div>
@@ -52,13 +70,31 @@ export default function LoginPage(props) {
           <GridContainer justify="center">
             <GridItem xs={12} sm={6} md={4}>
               <Card className={classes[cardAnimaton]}>
-                <form className={classes.form}>
+                <form className={classes.form} onSubmit={onSubmit}>
                  
                   <p className={classes.divider}>Track your steps</p>
                   <CardBody>
                     <CustomInput
-                      labelText="First Name..."
-                      id="first"
+                      labelText="Display Name..."
+                      id="name"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        type: "text",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Person className={classes.inputIconsColor} />
+                          </InputAdornment>
+                        )
+                        
+                      }}
+                      onChange= {handleNameChange}
+                
+                    />
+                    <CustomInput
+                      labelText="Team Name..."
+                      id="teamName"
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -69,44 +105,14 @@ export default function LoginPage(props) {
                             <People className={classes.inputIconsColor} />
                           </InputAdornment>
                         )
+                      
                       }}
+                      onChange= {handleTeamChange}
                     />
-                    <CustomInput
-                      labelText="Email..."
-                      id="email"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <CustomInput
-                      labelText="Password"
-                      id="pass"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "password",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Icon className={classes.inputIconsColor}>
-                              lock_outline
-                            </Icon>
-                          </InputAdornment>
-                        ),
-                        autoComplete: "off"
-                      }}
-                    />
+                    
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg">
+                    <Button type="submit" simple color="primary" size="lg">
                       Get started
                     </Button>
                   </CardFooter>

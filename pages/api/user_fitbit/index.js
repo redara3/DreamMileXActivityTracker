@@ -20,14 +20,15 @@ handler.get(async (req, res) => {
     revokeAccess(db);
   } else {
   console.log(req.query.code);
-  getaccessTokenFromCode(req.query.code, db);
+  console.log(req.query.state);
+  getaccessTokenFromCode(req.query.code, req.query.state, db);
   }
   res.send({ msg: "Success" });
 });
 
 
 
-const getaccessTokenFromCode = async (code, db) => {
+const getaccessTokenFromCode = async (code, state, db) => {
   const secret = clientId + ':' + clientSecret;
   let response = await fetch(`https://api.fitbit.com/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit`, {
     method : 'POST',
@@ -40,10 +41,10 @@ const getaccessTokenFromCode = async (code, db) => {
   console.log(authJson);
   currentToken = authJson.access_token;
   const fitbit_id = authJson.user_id;
-  getProfile(authJson.access_token, authJson.refresh_token, fitbit_id, db);
+  getProfile(authJson.access_token, authJson.refresh_token, state, fitbit_id, db);
 }
 
-const getProfile = async (accessToken, refreshToken, fitbitId, db) => {
+const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
 
   // let response = await fetch(`https://api.fitbit.com/1/user/-/profile.json`, {
     
@@ -52,7 +53,7 @@ const getProfile = async (accessToken, refreshToken, fitbitId, db) => {
   //   }
   // });
   // let userJson = await response.json(); //extract JSON from the http response
-  let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, fitbit_id: fitbitId}};
+  let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, displayName: JSON.parse(state).name, teamName: JSON.parse(state).teamName, fitbit_id: fitbitId}};
   
   await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/1.json`, {
     method: "POST",
