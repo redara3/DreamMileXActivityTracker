@@ -78,7 +78,12 @@ const getProfile = async (accessToken, refreshToken, fitbitId, db) => {
     }
   });
   const distanceJson = await response.json(); //extract JSON from the http response
-  
+  console.log(distanceJson)
+  Object.keys(distanceJson).forEach(function(v){
+    distanceJson[v.replace("-", "_")] = distanceJson[v];
+    delete distanceJson[v];
+    console.log(distanceJson);
+});
   
  response = await fetch(`https://api.fitbit.com/1/user/-/activities/steps/date/today/1m.json`, {
     
@@ -87,6 +92,15 @@ const getProfile = async (accessToken, refreshToken, fitbitId, db) => {
     }
   });
   const stepsJson = await response.json(); //extract JSON from the http response
+  Object.keys(stepsJson).forEach(function(v){
+    stepsJson[v.replace("-", "_")] = stepsJson[v];
+    delete stepsJson[v];
+    console.log(stepsJson);
+});
+  console.log(stepsJson)
+  _.mapKeys(stepsJson, function(value, key){
+    return _.replace(key, "-","_")
+  })
   const dbDocument = _.merge( userJson, distanceJson, stepsJson);
   db.collection("data").replaceOne({"user.fitbit_id": fitbitId}, dbDocument, { upsert: true }, function(err, res) {
     if (err) throw err;
