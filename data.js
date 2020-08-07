@@ -100,3 +100,4 @@ export const people = [
     gender: 'male',
   },
 ]
+
