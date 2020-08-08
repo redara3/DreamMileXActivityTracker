@@ -6,6 +6,7 @@ import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
 import People from "@material-ui/icons/People";
+import classNames from "classnames";
 // core components
 import Header from "../components/Header/Header.js";
 import HeaderLinks from "../components/Header/HeaderLinks.js";
@@ -18,6 +19,10 @@ import CardBody from "../components/Card/CardBody.js";
 import CardHeader from "../components/Card/CardHeader.js";
 import CardFooter from "../components/Card/CardFooter.js";
 import CustomInput from "../components/CustomInput/CustomInput.js";
+import Radio from "@material-ui/core/Radio";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+// @material-ui/icons
+import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
 
 import styles from "../components/jss/nextjs-material-kit/pages/loginPage.js";
 
@@ -33,6 +38,7 @@ export default function LoginPage(props) {
 
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('');
+  const [selectedEnabled, setSelectedEnabled] = useState("b");
   function onSubmit(event) {
     event.preventDefault();
     console.log(name);
@@ -49,6 +55,10 @@ export default function LoginPage(props) {
     setName(event.target.value)
   }
   const { ...rest } = props;
+  const wrapperDiv = classNames(
+    classes.checkboxAndRadio,
+    classes.checkboxAndRadioHorizontal
+  );
   return (
     <div>
       <Header
@@ -109,6 +119,94 @@ export default function LoginPage(props) {
                       }}
                       onChange= {handleTeamChange}
                     />
+
+                <div className={wrapperDiv}>
+          <FormControlLabel
+          control={
+            <Radio
+              checked={selectedEnabled === "a"}
+              onChange={() => setSelectedEnabled("a")}
+              value="a"
+              name="radio button enabled"
+              aria-label="A"
+              icon={
+                <FiberManualRecord
+                  className={classes.radioUnchecked}
+                />
+              }
+              checkedIcon={
+                <FiberManualRecord className={classes.radioChecked} />
+              }
+              classes={{
+                checked: classes.radio
+              }}
+            />
+          }
+          classes={{
+            label: classes.label
+          }}
+          label="First Radio"
+        />
+      </div>
+      <div className={wrapperDiv}>
+        <FormControlLabel
+          control={
+            <Radio
+              checked={selectedEnabled === "b"}
+              onChange={() => setSelectedEnabled("b")}
+              value="b"
+              name="radio button enabled"
+              aria-label="B"
+              icon={
+                <FiberManualRecord
+                  className={classes.radioUnchecked}
+                />
+              }
+              checkedIcon={
+                <FiberManualRecord className={classes.radioChecked} />
+              }
+              classes={{
+                checked: classes.radio
+              }}
+            />
+          }
+          classes={{
+            label: classes.label
+          }}
+          label="Second Radio"
+        />
+      </div>
+      <div className={wrapperDiv}>
+        <FormControlLabel
+          disabled
+          control={
+            <Radio
+              checked={false}
+              value="a"
+              name="radio button disabled"
+              aria-label="B"
+              icon={
+                <FiberManualRecord
+                  className={classes.radioUnchecked}
+                />
+              }
+              checkedIcon={
+                <FiberManualRecord className={classes.radioChecked} />
+              }
+              classes={{
+                checked: classes.radio
+              }}
+            />
+          }
+          classes={{
+            label: classes.label,
+            disabled: classes.disabledCheckboxAndRadio
+          }}
+          label="Disabled Unchecked Radio"
+        />
+      </div>
+      
+      
                     
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
