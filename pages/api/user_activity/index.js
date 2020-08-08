@@ -8,7 +8,7 @@ handler.use(middleware);
 
 handler.get(async (req, res) => {
   const data = await getActivity(req);
-  res.send({ data });
+  res.status(200).json(data);
 });
 
 export default handler;

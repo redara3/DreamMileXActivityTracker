@@ -15,6 +15,10 @@ import GridContainer from "../components/Grid/GridContainer.js";
 import GridItem from "../components/Grid/GridItem.js";
 import Table from "../components/Table/Table.js";
 import { makeStyles } from "@material-ui/core/styles";
+import useSWR from 'swr'
+
+const fetcher = (url) => fetch(url).then((res) => res.json())
+
 
 
 import styles from "../components/jss/nextjs-material-kit/pages/indexPage.js";
@@ -23,12 +27,17 @@ const useStyles = makeStyles(styles);
 
 export default function Index() {
   const classes = useStyles();
+  const { data, error } = useSWR('/api/user_activity', fetcher)
+
+  if (error) return <div>Failed to load</div>
+  if (!data) return <div>Loading...</div>
+  console.log(data);
   return (
     <div>
        <GridContainer>
          <GridItem xs={12} sm={12} md={12}>
       <Header
-        brand="NextJS Material Kit"
+        brand="Vibha DreamMileX"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -41,14 +50,14 @@ export default function Index() {
           <Card>
             <CardBody>
               <Table
-                tableHeaderColor="warning"
-                tableHead={["ID", "Name", "Salary", "Country"]}
-                tableData={[
-                  ["1", "Dakota Rice", "$36,738", "Niger"],
-                  ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                  ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                  ["4", "Philip Chaney", "$38,735", "Korea, South"]
+                
+                tableHead={[
+                  { title: "ID", field: "id" },
+                  { title: "Total Distance", field: "totalDistance" },
+                  { title: "Total Steps", field: "totalSteps" }
+                  
                 ]}
+                tableData={data}
               />
             </CardBody>
           </Card>

@@ -19,11 +19,11 @@ handler.get(async (req, res) => {
     console.log(req.query);
     revokeAccess(db);
   } else {
-  console.log(req.query.code);
-  console.log(req.query.state);
-  getaccessTokenFromCode(req.query.code, req.query.state, db);
+    console.log(req.query.code);
+    console.log(req.query.state);
+    getaccessTokenFromCode(req.query.code, req.query.state, db);
   }
-  res.send({ msg: "Success" });
+  res.redirect('/');
 });
 
 
