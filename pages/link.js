@@ -71,7 +71,7 @@ export default function LoginPage(props) {
       <div
         className={classes.pageHeader}
         style={{
-          backgroundImage: "url('./images/bg7.jpg')",
+          backgroundImage: "url('./images/running-bg.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "top center"
         }}
