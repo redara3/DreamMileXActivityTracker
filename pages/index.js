@@ -52,7 +52,10 @@ export default function Index() {
               <Table
                 
                 tableHead={[
-                  { title: "ID", field: "id" },
+                  // { title: "ID", field: "id" },
+                  { title: "Name", field: "name" },
+                  { title: "Team", field: "team" },
+                  { title: "Challenge", field: "challenge" },
                   { title: "Total Distance", field: "totalDistance" },
                   { title: "Total Steps", field: "totalSteps" }
                   

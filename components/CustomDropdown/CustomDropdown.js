@@ -24,6 +24,8 @@ const useStyles = makeStyles(styles);
 
 export default function CustomDropdown(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(-1);
+
   const handleClick = event => {
     if (anchorEl && anchorEl.contains(event.target)) {
       setAnchorEl(null);
@@ -43,6 +45,14 @@ export default function CustomDropdown(props) {
     }
     setAnchorEl(null);
   };
+  const handleMenuItemClick = (event, index, prop) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+    if (props && props.onClick) {
+      props.onClick(prop.value);
+    }
+  };
+  
   const classes = useStyles();
   const {
     buttonText,
@@ -56,7 +66,8 @@ export default function CustomDropdown(props) {
     left,
     rtlActive,
     noLiPadding,
-    navDropdown
+    navDropdown,
+    showSelected
   } = props;
   const caretClasses = classNames({
     [classes.caret]: true,
@@ -92,7 +103,7 @@ export default function CustomDropdown(props) {
           onClick={handleClick}
         >
           {icon}
-          {buttonText !== undefined ? buttonText : null}
+          {showSelected && selectedIndex!= -1 ? (buttonText !== undefined ? dropdownList[selectedIndex].displayLabel: '') : buttonText !== undefined ? buttonText : null}
           {caret ? <b className={caretClasses} /> : null}
         </Button>
       </div>
@@ -147,6 +158,19 @@ export default function CustomDropdown(props) {
                         />
                       );
                     }
+                    if (prop.select) {
+                      return (
+                        <MenuItem
+                          key={key}
+                          onClick={(event) => handleMenuItemClick(event, key, prop)}
+                          selected = {key === selectedIndex}
+                          value={prop.value}
+                          className={dropdownItem}
+                        >
+                          {prop.displayLabel}
+                        </MenuItem>
+                      );
+                    } 
                     return (
                       <MenuItem
                         key={key}
@@ -156,7 +180,7 @@ export default function CustomDropdown(props) {
                         {prop}
                       </MenuItem>
                     );
-                  })}
+                    })};
                 </MenuList>
               </ClickAwayListener>
             </Paper>

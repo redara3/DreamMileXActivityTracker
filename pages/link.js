@@ -25,7 +25,15 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
 
 import styles from "../components/jss/nextjs-material-kit/pages/loginPage.js";
-
+import Box from "@material-ui/core/Box";
+import Select from "@material-ui/core/Select";
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import CustomDropdown from "../components/CustomDropdown/CustomDropdown.js";
+import Checkbox from "@material-ui/core/Checkbox";
+// @material-ui/icons
+import Check from "@material-ui/icons/Check";
 
 const useStyles = makeStyles(styles);
 
@@ -38,12 +46,13 @@ export default function LoginPage(props) {
 
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('');
-  const [selectedEnabled, setSelectedEnabled] = useState("b");
+  const [challengeType, setChallengeType] = useState('');
+  const [checked, setChecked] = React.useState([ 22]);
   function onSubmit(event) {
     event.preventDefault();
     console.log(name);
     console.log(teamName);
-    const state = JSON.stringify({name:name, teamName: teamName})
+    const state = JSON.stringify({name:name, teamName: teamName, challengeType: challengeType})
     window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
   }
   function handleTeamChange(event) {
@@ -54,6 +63,21 @@ export default function LoginPage(props) {
     event.preventDefault();
     setName(event.target.value)
   }
+  function handleChallengeChange(value) {
+    setChallengeType(value);
+  }
+
+  const handleToggle = value => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+    setChecked(newChecked);
+  };
   const { ...rest } = props;
   const wrapperDiv = classNames(
     classes.checkboxAndRadio,
@@ -119,103 +143,54 @@ export default function LoginPage(props) {
                       }}
                       onChange= {handleTeamChange}
                     />
+                  <CustomDropdown
+                  showSelected
+                  dropdown
+                  dropdownHeader="Select your DreammileX challenge"
+                  buttonText="Challenge Type"
+                  buttonProps={{
+                    round: true,
+                    color: "info"
+                  }}
+                  onClick={handleChallengeChange}
+                  dropdownList={[
+                    {select: true, value: "50K", displayLabel:"September 50 Kilometers"},
+                    {select: true, value: "50M", displayLabel:"September 50 Miles"},
+                    {select: true, value: "100K", displayLabel:"September 100 Kilometers"},
+                    {select: true, value: "100M", displayLabel:"September 100 Miles"},
+                    {select: true, value: "5000S", displayLabel:"5,000 Daily Steps Average"},
+                    {select: true, value: "10000S", displayLabel:"10,000 Daily Steps Average"},
+                    {select: true, value: "15000S", displayLabel:"15,000 Daily Steps Average"},
+                    {select: true, value: "20000S", displayLabel:"20,000 Daily Steps Average"},
+                  ]}
+          />
 
-                <div className={wrapperDiv}>
-          <FormControlLabel
-          control={
-            <Radio
-              checked={selectedEnabled === "a"}
-              onChange={() => setSelectedEnabled("a")}
-              value="a"
-              name="radio button enabled"
-              aria-label="A"
-              icon={
-                <FiberManualRecord
-                  className={classes.radioUnchecked}
-                />
-              }
-              checkedIcon={
-                <FiberManualRecord className={classes.radioChecked} />
-              }
-              classes={{
-                checked: classes.radio
-              }}
-            />
-          }
-          classes={{
-            label: classes.label
-          }}
-          label="First Radio"
-        />
-      </div>
-      <div className={wrapperDiv}>
+        <div className={classes.checkboxAndRadio}>
         <FormControlLabel
           control={
-            <Radio
-              checked={selectedEnabled === "b"}
-              onChange={() => setSelectedEnabled("b")}
-              value="b"
-              name="radio button enabled"
-              aria-label="B"
-              icon={
-                <FiberManualRecord
-                  className={classes.radioUnchecked}
-                />
+            <Checkbox
+              tabIndex={-1}
+              onClick={() => handleToggle(22)}
+              checked={
+                checked.indexOf(22) !== -1 ? true : false
               }
-              checkedIcon={
-                <FiberManualRecord className={classes.radioChecked} />
-              }
-              classes={{
-                checked: classes.radio
-              }}
+              checkedIcon={<Check className={classes.checkedIcon} />}
+              icon={<Check className={classes.uncheckedIcon} />}
+              classes={{ checked: classes.checked }}
             />
           }
-          classes={{
-            label: classes.label
-          }}
-          label="Second Radio"
+          classes={{ label: classes.label }}
+          label="Checked"
         />
       </div>
-      <div className={wrapperDiv}>
-        <FormControlLabel
-          disabled
-          control={
-            <Radio
-              checked={false}
-              value="a"
-              name="radio button disabled"
-              aria-label="B"
-              icon={
-                <FiberManualRecord
-                  className={classes.radioUnchecked}
-                />
-              }
-              checkedIcon={
-                <FiberManualRecord className={classes.radioChecked} />
-              }
-              classes={{
-                checked: classes.radio
-              }}
-            />
-          }
-          classes={{
-            label: classes.label,
-            disabled: classes.disabledCheckboxAndRadio
-          }}
-          label="Disabled Unchecked Radio"
-        />
-      </div>
-      
-      
-                    
-                  </CardBody>
-                  <CardFooter className={classes.cardFooter}>
-                    <Button type="submit" simple color="primary" size="lg">
-                      Get started
-                    </Button>
-                  </CardFooter>
-                </form>
-              </Card>
+      </CardBody>
+      <CardFooter className={classes.cardFooter}>
+        <Button type="submit" simple color="primary" size="lg">
+          Get started
+        </Button>
+      </CardFooter>
+      </form>
+       </Card>
             </GridItem>
           </GridContainer>
         </div>

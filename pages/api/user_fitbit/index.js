@@ -52,7 +52,7 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
   //   }
   // });
   // let userJson = await response.json(); //extract JSON from the http response
-  let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, displayName: JSON.parse(state).name, teamName: JSON.parse(state).teamName, fitbit_id: fitbitId}};
+  let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, displayName: JSON.parse(state).name, teamName: JSON.parse(state).teamName,challengeType: JSON.parse(state).challengeType, fitbit_id: fitbitId}};
   
   await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/1.json`, {
     method: "POST",
