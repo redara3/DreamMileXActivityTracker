@@ -7,7 +7,6 @@ import { getUser } from '../../../lib/db';
 
 const clientId = process.env.FITBIT_CLIENT_ID;
 const clientSecret = process.env.FITBIT_CLIENT_SECRET;
-let currentToken = '';
 
 const handler = nextConnect();
 
@@ -23,7 +22,8 @@ handler.get(async (req, res) => {
     console.log(req.query.state);
     getaccessTokenFromCode(req.query.code, req.query.state, db);
   }
-  res.redirect('/');
+  res.writeHead(307, { Location: `/` })
+  res.end()
 });
 
 
@@ -39,7 +39,6 @@ const getaccessTokenFromCode = async (code, state, db) => {
   });
   const authJson = await response.json(); //extract JSON from the http response
   console.log(authJson);
-  currentToken = authJson.access_token;
   const fitbit_id = authJson.user_id;
   getProfile(authJson.access_token, authJson.refresh_token, state, fitbit_id, db);
 }
@@ -111,7 +110,6 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
 
 const revokeAccess = async () => {
   const secret = clientId + ':' + clientSecret;
-  console.log(btoa(secret));
   let response = await fetch(`https://api.fitbit.com/oauth2/revoke?token=${currentToken}`, {
     method: 'POST',
     
