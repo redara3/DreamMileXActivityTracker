@@ -1,36 +1,48 @@
 
+// import { useRouter } from 'next/router'
+
+// const User = () => {
+//   const { query } = useRouter()
+//   // console.log(query.id);
+//   // return <a href='https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_google&prompt=consent&response_type=code&client_id=22388002278-mk4alaek70jeh8qapqf9vnb7tec8uoo3.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read'>Login with Google</a>
+    
+// }
+
+// export default User
+
 
 import React from 'react';
-import Card from "../components/Card/Card.js";
-import CardBody from "../components/Card/CardBody.js";
-import CardHeader from "../components/Card/CardHeader.js";
-import CardFooter from "../components/Card/CardFooter.js";
+import Card from "../../components/Card/Card.js";
+import CardBody from "../../components/Card/CardBody.js";
+import CardHeader from "../../components/Card/CardHeader.js";
+import CardFooter from "../../components/Card/CardFooter.js";
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Link from 'next/link';
-import Header from "../components/Header/Header.js";
-import HeaderLinks from "../components/Header/HeaderLinks.js";
-import GridContainer from "../components/Grid/GridContainer.js";
-import GridItem from "../components/Grid/GridItem.js";
-import Parallax from "../components/Parallax/Parallax.js";
-import Table from "../components/Table/Table.js";
-import SnackbarContent from "../components/Snackbar/SnackbarContent.js";
-import Clearfix from "../components/Clearfix/Clearfix.js";
+import Header from "../../components/Header/Header.js";
+import HeaderLinks from "../../components/Header/HeaderLinks.js";
+import GridContainer from "../../components/Grid/GridContainer.js";
+import GridItem from "../../components/Grid/GridItem.js";
+import Parallax from "../../components/Parallax/Parallax.js";
+import Table from "../../components/Table/Table.js";
+import SnackbarContent from "../../components/Snackbar/SnackbarContent.js";
+import Clearfix from "../../components/Clearfix/Clearfix.js";
 import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
+
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 
 
-import styles from "../components/jss/nextjs-material-kit/pages/landingPage.js";
+import styles from "../../components/jss/nextjs-material-kit/pages/landingPage.js";
 
 const useStyles = makeStyles(styles);
 
-export default function Index() {
+export default function User() {
   const classes = useStyles();
   const { query } = useRouter()
   const { data, error } = useSWR('/api/user_activity', fetcher)
@@ -52,7 +64,7 @@ export default function Index() {
       />
       <Parallax filter responsive image={'./images/running-bg.jpg'}>
         <div className={classes.container}>
-        {query.action === 'revoke' ? <SnackbarContent
+      {query.action === 'revoke' ? <SnackbarContent
         message={
           <span>
             <b>SUCCESS ALERT:</b> You have successfully revoked your fitbit data tracking. Your data will be removed from the application.
@@ -130,31 +142,11 @@ export default function Index() {
       </GridContainer>
         </div>
       </Parallax>
-       <GridContainer>
-         
-       <GridItem xs={12} sm={12} md={12}>
-          <Card>
-            <CardBody>
-              <Table
-                
-                tableHead={[
-                  // { title: "ID", field: "id" },
-                  { title: "Name", field: "name" },
-                  { title: "Team", field: "team" },
-                  { title: "Challenge", field: "challenge" },
-                  { title: "Total Distance", field: "totalDistance" },
-                  { title: "Total Steps", field: "totalSteps" }
-                  
-                ]}
-                tableData={data}
-              />
-            </CardBody>
-          </Card>
-        </GridItem>
-        </GridContainer>
+       
 
 
     </div>
   );
   
 }
+

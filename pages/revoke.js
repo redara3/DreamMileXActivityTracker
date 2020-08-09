@@ -34,10 +34,12 @@ import CustomDropdown from "../components/CustomDropdown/CustomDropdown.js";
 import Checkbox from "@material-ui/core/Checkbox";
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles(styles);
 
 export default function LoginPage(props) {
+  const router = useRouter();
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
@@ -49,40 +51,18 @@ export default function LoginPage(props) {
   const [fitbitID, setFitbitID] = useState('');
   const [checked, setChecked] = React.useState([ 22]);
   const onSubmit = async (e) => {
-    event.preventDefault();
+    e.preventDefault();
+    console.log(e.currentTarget.fitbitID.value);
       const res = await fetch(`/api/user_fitbit/${fitbitID}`);
     if (res.status === 200) {
       const userObj = await res.json();
       const response = await fetch(`/api/user_fitbit?type=revoke&fitbit_id=${userObj.fitbit_id}&access_token=${userObj.access_token}&refresh_token=${userObj.refresh_token}`);
-      console.log(response);
+      const revokeResponseObj = await response.json();
+      router.push(`/?id=${revokeResponseObj.fitbit_id}&action=${revokeResponseObj.action}`);
     } else {
-      console.log(userObj)
+      console.log(userObj);
     }
   }
-
-
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const body = {
-  //     email: e.currentTarget.email.value,
-  //     name: e.currentTarget.name.value,
-  //     password: e.currentTarget.password.value,
-  //   };
-  //   const res = await fetch('/api/users', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify(body),
-  //   });
-  //   if (res.status === 201) {
-  //     const userObj = await res.json();
-  //     // writing our user object to the state
-  //     mutate(userObj);
-  //   } else {
-  //     setErrorMsg(await res.text());
-  //   }
-  // };
-
 
   function handleTeamChange(event) {
     event.preventDefault();

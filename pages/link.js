@@ -52,6 +52,8 @@ export default function LoginPage(props) {
     event.preventDefault();
     console.log(name);
     console.log(teamName);
+    console.log(e.currentTarget.name.value);
+    console.log(e.currentTarget.teamName.value);
     const state = JSON.stringify({name:name, teamName: teamName, challengeType: challengeType})
     window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
   }
@@ -111,6 +113,7 @@ export default function LoginPage(props) {
                     <CustomInput
                       labelText="Display Name..."
                       id="name"
+                      name="name"
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -130,6 +133,7 @@ export default function LoginPage(props) {
                     <CustomInput
                       labelText="Team Name..."
                       id="teamName"
+                      name="teamName"
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -147,10 +151,11 @@ export default function LoginPage(props) {
                   <CustomDropdown
                   showSelected
                   dropdown
+                  id="challengeType"
+                  name="challengeType"
                   dropdownHeader="Select your DreammileX challenge"
                   buttonText="Challenge Type"
                   buttonProps={{
-                    round: true,
                     color: "info"
                   }}
                   hoverColor="info"

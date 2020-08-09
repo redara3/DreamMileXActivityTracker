@@ -16,11 +16,14 @@ handler.get(async (req, res) => {
   const db = req.db;
   if(req.query.type === 'revoke') {
     console.log(req.query);
-    revokeAccess(db, req.query.access_token, req.query.refresh_token, req.query.fitbit_id);
+    const returnResponse = await revokeAccess(db, req.query.access_token, req.query.refresh_token, req.query.fitbit_id);
+    res.status(200).json(returnResponse)
   } else {
     console.log(req.query.code);
     console.log(req.query.state);
-    getaccessTokenFromCode(req.query.code, req.query.state, db);
+    const response = await getaccessTokenFromCode(req.query.code, req.query.state, db);
+    res.writeHead(307, {Location: `/user/${response.fitbit_id}?action=${response.action}`});                    // <- redirect
+    res.end();
   }
   res.writeHead(307, { Location: `/` })
   res.end()
@@ -40,18 +43,11 @@ const getaccessTokenFromCode = async (code, state, db) => {
   const authJson = await response.json(); //extract JSON from the http response
   console.log(authJson);
   const fitbit_id = authJson.user_id;
-  getProfile(authJson.access_token, authJson.refresh_token, state, fitbit_id, db);
+  return await getProfile(authJson.access_token, authJson.refresh_token, state, fitbit_id, db);
 }
 
 const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
 
-  // let response = await fetch(`https://api.fitbit.com/1/user/-/profile.json`, {
-    
-  //   headers: {
-  //     'Authorization': `Bearer ${accessToken}`
-  //   }
-  // });
-  // let userJson = await response.json(); //extract JSON from the http response
   let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, displayName: JSON.parse(state).name, teamName: JSON.parse(state).teamName,challengeType: JSON.parse(state).challengeType, fitbit_id: fitbitId}};
   
   await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/1.json`, {
@@ -106,11 +102,12 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
     if (err) throw err;
     console.log("1 document replaced");
   });
+  return {fitbit_id: fitbitId, action: 'link', status: 'success'};
 }
 
 const revokeAccess = async (db, access_token, refresh_token, fitbit_id) => {
   const secret = clientId + ':' + clientSecret;
-  let response = await fetch(`https://api.fitbit.com/oauth2/revoke?token=${access_token}`, {
+   await fetch(`https://api.fitbit.com/oauth2/revoke?token=${access_token}`, {
     method: 'POST',
     
     headers: {
@@ -119,7 +116,7 @@ const revokeAccess = async (db, access_token, refresh_token, fitbit_id) => {
     }
   });
   
-  response = await fetch(`https://api.fitbit.com/oauth2/revoke?token=${refresh_token}`, {
+  await fetch(`https://api.fitbit.com/oauth2/revoke?token=${refresh_token}`, {
     method: 'POST',
     
     headers: {
@@ -131,8 +128,8 @@ const revokeAccess = async (db, access_token, refresh_token, fitbit_id) => {
     if (err) throw err;
     console.log("1 document deleted");
   });
-  //todo: delete the user
-  // do something with myJson
+  return {fitbit_id: fitbit_id, action: 'revoke', status: 'success'};
+  
 }
 
 
