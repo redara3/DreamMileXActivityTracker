@@ -213,7 +213,7 @@ export default function LoginPage(props) {
       </div>
       </CardBody>
       <CardFooter className={classes.cardFooter}>
-        <Button type="submit" simple color="primary" size="lg">
+        <Button type="submit" simple color="info" size="lg">
           Revoke my Access
         </Button>
       </CardFooter>

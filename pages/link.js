@@ -153,6 +153,7 @@ export default function LoginPage(props) {
                     round: true,
                     color: "info"
                   }}
+                  hoverColor="info"
                   onClick={handleChallengeChange}
                   dropdownList={[
                     {select: true, value: "50K", displayLabel:"September 50 Kilometers"},
@@ -187,7 +188,7 @@ export default function LoginPage(props) {
       </div>
       </CardBody>
       <CardFooter className={classes.cardFooter}>
-        <Button type="submit" simple color="primary" size="lg">
+        <Button type="submit" simple color="info" size="lg">
           Get started
         </Button>
       </CardFooter>

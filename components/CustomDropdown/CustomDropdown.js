@@ -193,7 +193,7 @@ export default function CustomDropdown(props) {
 
 CustomDropdown.defaultProps = {
   caret: true,
-  hoverColor: "primary"
+  hoverColor: "info"
 };
 
 CustomDropdown.propTypes = {

@@ -33,6 +33,7 @@ export default function HeaderLinks(props) {
             className: classes.navLink,
             color: "transparent"
           }}
+          hoverColor="info"
           buttonIcon={Apps}
           dropdownList={[
             <Link href="/link">
