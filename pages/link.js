@@ -55,7 +55,7 @@ export default function LoginPage(props) {
     console.log(event.currentTarget.name.value);
     console.log(event.currentTarget.teamName.value);
     const state = JSON.stringify({name:name, teamName: teamName, challengeType: challengeType})
-    window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
+    window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=https%3A%2F%2Fdream-mile-x-activity-tracker.vercel.app%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
   }
   function handleTeamChange(event) {
     event.preventDefault();
