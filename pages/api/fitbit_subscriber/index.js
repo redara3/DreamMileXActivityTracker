@@ -12,14 +12,12 @@ handler.use(middleware);
 
 handler.get(async (req, res) => {
   const db = req.db;
-  console.log(req.query);
   let code = req.query.verify || "";
-        logger.info(JSON.stringify(req.body));
-        if (code == process.env.FITBIT_SUBSCRIBER_VERIFY_CODE && code != "") {
-            res.sendStatus(204);
-        } else if (code != VERIFICATION_CODE && code != "") {
-            res.sendStatus(404);
-        }
+    if (code == process.env.FITBIT_SUBSCRIBER_VERIFY_CODE && code != "") {
+        res.sendStatus(204);
+    } else if (code != process.env.FITBIT_SUBSCRIBER_VERIFY_CODE && code != "") {
+        res.sendStatus(404);
+    }
   
 });
 
