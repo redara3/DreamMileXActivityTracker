@@ -52,8 +52,8 @@ export default function LoginPage(props) {
     event.preventDefault();
     console.log(name);
     console.log(teamName);
-    console.log(e.currentTarget.name.value);
-    console.log(e.currentTarget.teamName.value);
+    console.log(event.currentTarget.name.value);
+    console.log(event.currentTarget.teamName.value);
     const state = JSON.stringify({name:name, teamName: teamName, challengeType: challengeType})
     window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
   }

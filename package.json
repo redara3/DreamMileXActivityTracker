@@ -20,6 +20,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-swipeable-views": "^0.13.9",
     "recharts": "^1.8.5",
     "swr": "0.1.18"
   },

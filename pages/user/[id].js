@@ -30,6 +30,13 @@ import SnackbarContent from "../../components/Snackbar/SnackbarContent.js";
 import Clearfix from "../../components/Clearfix/Clearfix.js";
 import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
+// @material-ui/icons
+import Dashboard from "@material-ui/icons/Dashboard";
+import Schedule from "@material-ui/icons/Schedule";
+import List from "@material-ui/icons/List";
+
+// core components
+import NavPills from "../../components/NavPills/NavPills.js";
 import { makeStyles } from "@material-ui/core/styles";
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
@@ -45,7 +52,7 @@ const useStyles = makeStyles(styles);
 export default function User() {
   const classes = useStyles();
   const { query } = useRouter()
-  const { data, error } = useSWR('/api/user_activity', fetcher)
+  const { data, error } = useSWR(`/api/user_fitbit/${query.id}`, fetcher)
 
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>
@@ -62,18 +69,9 @@ export default function User() {
           color: "white"
         }}
       />
-      <Parallax filter responsive image={'./images/running-bg.jpg'}>
+      <Parallax filter responsive image={'/images/running-bg.jpg'}>
         <div className={classes.container}>
-      {query.action === 'revoke' ? <SnackbarContent
-        message={
-          <span>
-            <b>SUCCESS ALERT:</b> You have successfully revoked your fitbit data tracking. Your data will be removed from the application.
-          </span>
-        }
-        close
-        color="success"
-        icon={Check}
-      /> : query.action === 'link' ? <SnackbarContent
+      {query.action === 'link' ? <SnackbarContent
       message={
         <span>
           <b>SUCCESS ALERT:</b> You have successfully linked your fitbit data tracking. Your id is {query.id}. Make a note of it.
@@ -85,61 +83,96 @@ export default function User() {
     />: ''}
       <Clearfix/>
       
-        <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="success">
-              
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  {/* <ArrowUpward className={classes.upArrowCardCategory} /> 55% */}
-                </span>{" "}
-                increase in today sales.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                {/* <AccessTime /> updated 4 minutes ago */}
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="warning">
-              
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                {/* <AccessTime /> campaign sent 2 days ago */}
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                {/* <AccessTime /> campaign sent 2 days ago */}
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer>
+      <GridContainer>
+            <GridItem xs={12} sm={12} md={8} lg={12}>
+              <NavPills
+                color="primary"
+                tabs={[
+                  {
+                    tabButton: "Information",
+                    tabIcon: Dashboard,
+                    tabContent: (
+                      <span>
+                        <p>
+                          Collaboratively administrate empowered markets via
+                          plug-and-play networks. Dynamically procrastinate B2C
+                          users after installed base benefits.
+                        </p>
+                        <br />
+                        <p>
+                          Dramatically visualize customer directed convergence
+                          without revolutionary ROI. Collaboratively
+                          administrate empowered markets via plug-and-play
+                          networks. Dynamically procrastinate B2C users after
+                          installed base benefits.
+                        </p>
+                        <br />
+                        <p>
+                          Dramatically visualize customer directed convergence
+                          without revolutionary ROI. Collaboratively
+                          administrate empowered markets via plug-and-play
+                          networks. Dynamically procrastinate B2C users after
+                          installed base benefits.
+                        </p>
+                      </span>
+                    )
+                  },
+                  {
+                    tabButton: "Schedule",
+                    tabIcon: Schedule,
+                    tabContent: (
+                      <span>
+                        <p>
+                          Efficiently unleash cross-media information without
+                          cross-media value. Quickly maximize timely
+                          deliverables for real-time schemas.
+                        </p>
+                        <br />
+                        <p>
+                          Dramatically maintain clicks-and-mortar solutions
+                          without functional solutions. Dramatically visualize
+                          customer directed convergence without revolutionary
+                          ROI. Collaboratively administrate empowered markets
+                          via plug-and-play networks. Dynamically procrastinate
+                          B2C users after installed base benefits.
+                        </p>
+                      </span>
+                    )
+                  },
+                  {
+                    tabButton: "Tasks",
+                    tabIcon: List,
+                    tabContent: (
+                      <span>
+                        <p>
+                          Collaboratively administrate empowered markets via
+                          plug-and-play networks. Dynamically procrastinate B2C
+                          users after installed base benefits.
+                        </p>
+                        <br />
+                        <p>
+                          Dramatically visualize customer directed convergence
+                          without revolutionary ROI. Collaboratively
+                          administrate empowered markets via plug-and-play
+                          networks. Dynamically procrastinate B2C users after
+                          installed base benefits.
+                        </p>
+                        <br />
+                        <p>
+                          Dramatically visualize customer directed convergence
+                          without revolutionary ROI. Collaboratively
+                          administrate empowered markets via plug-and-play
+                          networks. Dynamically procrastinate B2C users after
+                          installed base benefits.
+                        </p>
+                      </span>
+                    )
+                  }
+                ]}
+              />
+            </GridItem>
+            
+          </GridContainer>
         </div>
       </Parallax>
        

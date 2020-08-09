@@ -11,8 +11,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 // core components
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "../../components/Grid/GridContainer.js";
+import GridItem from "../../components/Grid/GridItem.js";
 
 import styles from "../jss/nextjs-material-kit/components/navPillsStyle.js";
 
@@ -101,7 +101,7 @@ export default function NavPills(props) {
 
 NavPills.defaultProps = {
   active: 0,
-  color: "primary"
+  color: "info"
 };
 
 NavPills.propTypes = {
