@@ -33,7 +33,7 @@ handler.get(async (req, res) => {
 
 const getaccessTokenFromCode = async (code, state, db) => {
   const secret = clientId + ':' + clientSecret;
-  let response = await fetch(`https://api.fitbit.com/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit`, {
+  let response = await fetch(`https://api.fitbit.com/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=https%3A%2F%2Fdream-mile-x-activity-tracker.vercel.app%2Fapi%2Fuser_fitbit`, {
     method : 'POST',
     headers: {
       'Authorization': `Basic ${btoa(secret)}`,

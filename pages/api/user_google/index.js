@@ -10,7 +10,7 @@ const {google} = require('googleapis');
 const oauth2Client = new google.auth.OAuth2(
   clientId,
   clientSecret,
-  'http://localhost:3000/api/user_google'
+  'https://dream-mile-x-activity-tracker.vercel.app/api/user_google'
 );
 
 const fitness = google.fitness('v1');

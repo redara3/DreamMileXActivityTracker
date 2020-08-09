@@ -1,14 +1,4 @@
 
-// import { useRouter } from 'next/router'
-
-// const User = () => {
-//   const { query } = useRouter()
-//   // console.log(query.id);
-//   // return <a href='https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_google&prompt=consent&response_type=code&client_id=22388002278-mk4alaek70jeh8qapqf9vnb7tec8uoo3.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read'>Login with Google</a>
-    
-// }
-
-// export default User
 
 
 import React from 'react';
