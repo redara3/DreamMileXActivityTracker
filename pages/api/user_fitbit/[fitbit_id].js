@@ -8,7 +8,8 @@ handler.use(middleware);
 
 handler.get(async (req, res) => {
   const user = await getUser(req, req.query.fitbit_id);
-  res.send({ user });
+  console.log(user);
+  res.status(200).json(user);
 });
 
 export default handler;

@@ -46,15 +46,44 @@ export default function LoginPage(props) {
 
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('');
-  const [challengeType, setChallengeType] = useState('');
+  const [fitbitID, setFitbitID] = useState('');
   const [checked, setChecked] = React.useState([ 22]);
-  function onSubmit(event) {
+  const onSubmit = async (e) => {
     event.preventDefault();
-    console.log(name);
-    console.log(teamName);
-    const state = JSON.stringify({name:name, teamName: teamName, challengeType: challengeType})
-    window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
+      const res = await fetch(`/api/user_fitbit/${fitbitID}`);
+    if (res.status === 200) {
+      const userObj = await res.json();
+      const response = await fetch(`/api/user_fitbit?type=revoke&fitbit_id=${userObj.fitbit_id}&access_token=${userObj.access_token}&refresh_token=${userObj.refresh_token}`);
+      console.log(response);
+    } else {
+      console.log(userObj)
+    }
   }
+
+
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const body = {
+  //     email: e.currentTarget.email.value,
+  //     name: e.currentTarget.name.value,
+  //     password: e.currentTarget.password.value,
+  //   };
+  //   const res = await fetch('/api/users', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify(body),
+  //   });
+  //   if (res.status === 201) {
+  //     const userObj = await res.json();
+  //     // writing our user object to the state
+  //     mutate(userObj);
+  //   } else {
+  //     setErrorMsg(await res.text());
+  //   }
+  // };
+
+
   function handleTeamChange(event) {
     event.preventDefault();
     setTeamName(event.target.value)
@@ -63,10 +92,10 @@ export default function LoginPage(props) {
     event.preventDefault();
     setName(event.target.value)
   }
-  function handleChallengeChange(value) {
-    setChallengeType(value);
+  function handleFitbitIDChange(event) {
+    event.preventDefault();
+    setFitbitID(event.target.value)
   }
-
   const handleToggle = value => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -106,7 +135,7 @@ export default function LoginPage(props) {
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form} onSubmit={onSubmit}>
                  
-                  <p className={classes.divider}>Track your steps</p>
+                  <p className={classes.divider}>Revoke Access</p>
                   <CardBody>
                     <CustomInput
                       labelText="Display Name..."
@@ -123,7 +152,6 @@ export default function LoginPage(props) {
                         )
                         
                       }}
-                      formControlProps={{required: true}}
                       onChange= {handleNameChange}
                 
                     />
@@ -144,33 +172,31 @@ export default function LoginPage(props) {
                       }}
                       onChange= {handleTeamChange}
                     />
-                  <CustomDropdown
-                  showSelected
-                  dropdown
-                  dropdownHeader="Select your DreammileX challenge"
-                  buttonText="Challenge Type"
-                  buttonProps={{
-                    round: true,
-                    color: "info"
-                  }}
-                  onClick={handleChallengeChange}
-                  dropdownList={[
-                    {select: true, value: "50K", displayLabel:"September 50 Kilometers"},
-                    {select: true, value: "50M", displayLabel:"September 50 Miles"},
-                    {select: true, value: "100K", displayLabel:"September 100 Kilometers"},
-                    {select: true, value: "100M", displayLabel:"September 100 Miles"},
-                    {select: true, value: "5000S", displayLabel:"5,000 Daily Steps Average"},
-                    {select: true, value: "10000S", displayLabel:"10,000 Daily Steps Average"},
-                    {select: true, value: "15000S", displayLabel:"15,000 Daily Steps Average"},
-                    {select: true, value: "20000S", displayLabel:"20,000 Daily Steps Average"},
-                  ]}
-                  formControlProps={{required: true}}
-          />
+                    <CustomInput
+                      labelText="Fitbit ID"
+                      id="fitbitID"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        type: "text",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <People className={classes.inputIconsColor} />
+                          </InputAdornment>
+                        )
+                      
+                      }}
+                      formControlProps={{required: true}}
+                      onChange= {handleFitbitIDChange}
+                    />
+                
 
         <div className={classes.checkboxAndRadio}>
         <FormControlLabel
           control={
             <Checkbox
+              formControlProps={{required: true}}
               tabIndex={-1}
               onClick={() => handleToggle(22)}
               checked={
@@ -182,13 +208,13 @@ export default function LoginPage(props) {
             />
           }
           classes={{ label: classes.label }}
-          label= "I am participating in Vibha Dream Mile X 2020."
+          label="I would like to revoke my fitbit activity data access now. My fitbit id is accurate."
         />
       </div>
       </CardBody>
       <CardFooter className={classes.cardFooter}>
         <Button type="submit" simple color="primary" size="lg">
-          Get started
+          Revoke my Access
         </Button>
       </CardFooter>
       </form>

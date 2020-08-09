@@ -62,13 +62,14 @@ export default function Header(props) {
     [classes.fixed]: fixed
   });
   const brandComponent = (
-    <Link href="/components" as="/components">
+    <Link href="/" as="/">
       <Button className={classes.title}>{brand}</Button>
     </Link>
   );
   return (
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
+      <img src="/images/DreamMile-Logo.png" alt="logo" className={classes.logo} />
         {leftLinks !== undefined ? brandComponent : null}
         <div className={classes.flex}>
           {leftLinks !== undefined ? (

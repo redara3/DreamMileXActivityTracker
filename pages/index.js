@@ -34,8 +34,6 @@ export default function Index() {
   console.log(data);
   return (
     <div>
-       <GridContainer>
-         <GridItem xs={12} sm={12} md={12}>
       <Header
         brand="Vibha DreamMileX"
         rightLinks={<HeaderLinks />}
@@ -45,6 +43,17 @@ export default function Index() {
           color: "white"
         }}
       />
+      <div
+        className={classes.pageHeader}
+        style={{
+          backgroundImage: "url('./images/running-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "top center"
+        }}
+      ></div>
+       <GridContainer>
+         <GridItem xs={12} sm={12} md={12}>
+
      </GridItem>
        <GridItem xs={12} sm={12} md={12}>
           <Card>

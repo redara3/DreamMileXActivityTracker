@@ -16,7 +16,7 @@ handler.get(async (req, res) => {
   const db = req.db;
   if(req.query.type === 'revoke') {
     console.log(req.query);
-    revokeAccess(db);
+    revokeAccess(db, req.query.access_token, req.query.refresh_token, req.query.fitbit_id);
   } else {
     console.log(req.query.code);
     console.log(req.query.state);
@@ -108,9 +108,9 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
   });
 }
 
-const revokeAccess = async () => {
+const revokeAccess = async (db, access_token, refresh_token, fitbit_id) => {
   const secret = clientId + ':' + clientSecret;
-  let response = await fetch(`https://api.fitbit.com/oauth2/revoke?token=${currentToken}`, {
+  let response = await fetch(`https://api.fitbit.com/oauth2/revoke?token=${access_token}`, {
     method: 'POST',
     
     headers: {
@@ -118,8 +118,20 @@ const revokeAccess = async () => {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   });
-  const myJson = await response.json(); //extract JSON from the http response
-  console.log(myJson);
+  
+  response = await fetch(`https://api.fitbit.com/oauth2/revoke?token=${refresh_token}`, {
+    method: 'POST',
+    
+    headers: {
+      'Authorization': `Basic ${btoa(secret)}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+  db.collection("data").deleteOne({"user.fitbit_id": fitbit_id}, function(err, res) {
+    if (err) throw err;
+    console.log("1 document deleted");
+  });
+  //todo: delete the user
   // do something with myJson
 }
 

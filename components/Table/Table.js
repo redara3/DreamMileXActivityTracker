@@ -56,6 +56,7 @@ export default function CustomTable(props) {
   return (
     <div className={classes.tableResponsive}>
       <MaterialTable icons={tableIcons} className={classes.table} columns={tableHead}
+      title="Activity Summary"
         data ={tableData} options={{
           headerStyle: {
             backgroundColor: '#01579b',

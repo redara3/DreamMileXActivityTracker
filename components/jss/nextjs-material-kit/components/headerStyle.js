@@ -32,6 +32,10 @@ const headerStyle = {
     position: "relative",
     zIndex: "unset"
   },
+  logo: {
+    maxWidth: 100,
+    maxHeight: 100
+  },
   absolute: {
     position: "absolute",
     zIndex: "1100"
