@@ -19,23 +19,21 @@ handler.get(async (req, res) => {
         case 'GET':
             let code = req.query.verify || "";
             if (code == process.env.FITBIT_SUBSCRIBER_VERIFY_CODE && code != "") {
-                res.status(204)
+                res.status(204).end()
             } else if (code != process.env.FITBIT_SUBSCRIBER_VERIFY_CODE && code != "") {
-                res.status(404)
+                res.status(404).end();
             }
             break;
         case 'POST':
-            if (req.is("application/json")) {
+            
                 let notifications = req.body;
     
                 // Fitbit subscription expects a 204 response within 3 seconds.
-                res.status(204)
+                res.status(204).end()
     
                 // Push notifications to a queue to be handled.
                 console.log(notifications);
-            } else {
-                res.status(400)
-            }
+            
           break
         default:
           res.status(405).end() //Method Not Allowed
