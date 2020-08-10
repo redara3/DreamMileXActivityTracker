@@ -1,4 +1,4 @@
-import { container, title } from "../../nextjs-material-kit.js";
+import { container, title, infoColor } from "../../nextjs-material-kit.js";
 import {
   successColor,
   whiteColor,
@@ -46,9 +46,9 @@ const landingPageStyle = {
   },
   
   stats: {
-    color: grayColor[0],
+    color: infoColor,
     display: "inline-flex",
-    fontSize: "12px",
+    fontSize: "18px",
     lineHeight: "22px",
     "& svg": {
       top: "4px",

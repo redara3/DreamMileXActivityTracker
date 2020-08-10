@@ -50,7 +50,7 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
 
   let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, displayName: JSON.parse(state).name, teamName: JSON.parse(state).teamName,challengeType: JSON.parse(state).challengeType, fitbit_id: fitbitId}};
   
-  await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/1.json`, {
+  await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/${fitbitId}.json`, {
     method: "POST",
     headers: {
         "Authorization": `Bearer ${accessToken}`
@@ -93,6 +93,8 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
     delete stepsJson[v];
     console.log(stepsJson);
 });
+
+
   console.log(stepsJson)
   _.mapKeys(stepsJson, function(value, key){
     return _.replace(key, "-","_")

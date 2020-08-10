@@ -5,6 +5,7 @@ import { forwardRef } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 
 import MaterialTable from "material-table";
+import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
@@ -55,9 +56,16 @@ export default function CustomTable(props) {
   const { tableHead, tableData, tableHeaderColor } = props;
   return (
     <div className={classes.tableResponsive}>
-      <MaterialTable icons={tableIcons} className={classes.table} columns={tableHead}
+      <MaterialTable icons={tableIcons} options={{
+        headerStyle: {
+          backgroundColor: '#01579b',
+          color: '#FFF'
+        }
+      }} className={classes.table} columns={tableHead}
       title="Activity Summary"
-        data ={tableData} options={{
+        data ={tableData} 
+        
+        options={{
           headerStyle: {
             backgroundColor: '#01579b',
             color: '#FFF'
@@ -65,6 +73,39 @@ export default function CustomTable(props) {
         }}>
        
       </MaterialTable>
+      {/* <Table className={classes.table}>
+        {tableHead !== undefined ? (
+          <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
+            <TableRow className={classes.tableHeadRow}>
+              {tableHead.map((prop, key) => {
+                return (
+                  <TableCell
+                    className={classes.tableCell + " " + classes.tableHeadCell}
+                    key={key}
+                  >
+                    {prop}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
+        ) : null}
+        <TableBody>
+          {tableData.map((prop, key) => {
+            return (
+              <TableRow key={key} className={classes.tableBodyRow}>
+                {prop.map((prop, key) => {
+                  return (
+                    <TableCell className={classes.tableCell} key={key}>
+                      {prop}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table> */}
     </div>
   );
 }

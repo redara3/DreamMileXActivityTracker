@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import Card from "../components/Card/Card.js";
 import CardBody from "../components/Card/CardBody.js";
@@ -17,9 +15,11 @@ import Parallax from "../components/Parallax/Parallax.js";
 import Table from "../components/Table/Table.js";
 import SnackbarContent from "../components/Snackbar/SnackbarContent.js";
 import Clearfix from "../components/Clearfix/Clearfix.js";
+import Pagination from "../components/Pagination/Pagination.js";
 import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
+import _ from 'lodash'
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
 const fetcher = (url) => fetch(url).then((res) => res.json())
@@ -32,12 +32,14 @@ const useStyles = makeStyles(styles);
 
 export default function Index() {
   const classes = useStyles();
+  
+
   const { query } = useRouter()
   const { data, error } = useSWR('/api/user_activity', fetcher)
 
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>
-  console.log(data);
+  
   return (
     <div>
       <Header
@@ -74,59 +76,41 @@ export default function Index() {
       <Clearfix/>
       
         <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
+        <GridItem xs={12} sm={12} md={6}>
           <Card chart>
-            <CardHeader color="success">
-              
-            </CardHeader>
+        
             <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
+              <h4 className={classes.cardTitle}>Highest Distance</h4>
               <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  {/* <ArrowUpward className={classes.upArrowCardCategory} /> 55% */}
-                </span>{" "}
-                increase in today sales.
+                
+                {_.maxBy(data, 'totalDistance').name}
               </p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                {/* <AccessTime /> updated 4 minutes ago */}
+              {_.maxBy(data, 'totalDistance').totalDistance}
               </div>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+        <GridItem xs={12} sm={12} md={6}>
           <Card chart>
-            <CardHeader color="warning">
-              
-            </CardHeader>
+            
             <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
+            <h4 className={classes.cardTitle}>Highest Steps</h4>
+              <p className={classes.cardCategory}>
+                
+                {_.maxBy(data, 'totalSteps').name}
+              </p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                {/* <AccessTime /> campaign sent 2 days ago */}
+              {_.maxBy(data, 'totalSteps').totalSteps}
               </div>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                {/* <AccessTime /> campaign sent 2 days ago */}
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+        
       </GridContainer>
         </div>
       </Parallax>
@@ -136,10 +120,14 @@ export default function Index() {
           <Card>
             <CardBody>
               <Table
-                
+                tableHeaderColor = "info"
                 tableHead={[
                   // { title: "ID", field: "id" },
-                  { title: "Name", field: "name" },
+                  { title: "Name", field: "name", cellStyle: {
+                    color: "inherit",
+                  }, headerStyle: {
+                    backgroundColor: '#039be5',
+                  } },
                   { title: "Team", field: "team" },
                   { title: "Challenge", field: "challenge" },
                   { title: "Total Distance", field: "totalDistance" },
@@ -148,6 +136,9 @@ export default function Index() {
                 ]}
                 tableData={data}
               />
+
+
+
             </CardBody>
           </Card>
         </GridItem>
