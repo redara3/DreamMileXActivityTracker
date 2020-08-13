@@ -29,12 +29,11 @@ handler.get(async (req, res) => {
             break;
         case 'POST':
            let notifications = req.body;
-           res.status(204);
-            console.log(notifications);
-            if(notifications.collectionType === 'activities') {
+           console.log(notifications);
+            // if(notifications.collectionType === 'activities') {
               updateData(req, notifications.ownerId);
-            }
-            // Fitbit subscription expects a 204 response within 3 seconds.
+            // }
+           res.status(204).end();
             
           break
         default:
