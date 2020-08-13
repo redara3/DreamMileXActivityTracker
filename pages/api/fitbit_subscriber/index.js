@@ -1,20 +1,6 @@
-import btoa from 'btoa';
-import nextConnect from 'next-connect';
-import middleware from '../../../middlewares/middleware';
-import _ from 'lodash';
-import { updateData } from '../../../lib/fitbit'; 
-const clientId = process.env.FITBIT_CLIENT_ID;
-const clientSecret = process.env.FITBIT_CLIENT_SECRET;
 
-const handler = nextConnect();
-
-handler.use(middleware);
-
-handler.get(async (req, res) => {
-  const db = req.db;
+export default function handler(req, res) {
   
-
-
     switch (req.method) {
         case 'GET':
             let code = req.query.verify || "";
@@ -31,7 +17,7 @@ handler.get(async (req, res) => {
            let notifications = req.body;
            console.log(notifications);
             // if(notifications.collectionType === 'activities') {
-              updateData(req, notifications.ownerId);
+              // updateData(req, notifications.ownerId);
             // }
            res.status(204).end();
             
@@ -41,7 +27,7 @@ handler.get(async (req, res) => {
           break
       }
   
-});
+};
 
 
 
