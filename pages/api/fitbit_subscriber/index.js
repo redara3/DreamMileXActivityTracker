@@ -2,7 +2,7 @@ import btoa from 'btoa';
 import nextConnect from 'next-connect';
 import middleware from '../../../middlewares/middleware';
 import _ from 'lodash';
-
+import { updateData } from '../../../lib/fitbit'; 
 const clientId = process.env.FITBIT_CLIENT_ID;
 const clientSecret = process.env.FITBIT_CLIENT_SECRET;
 
@@ -23,16 +23,18 @@ handler.get(async (req, res) => {
             } else if (code != process.env.FITBIT_SUBSCRIBER_VERIFY_CODE && code != "") {
                 res.status(404).end();
             }
+            else {
+              res.status(404).end();
+            }
             break;
         case 'POST':
-            
-                let notifications = req.body;
-    
-                // Fitbit subscription expects a 204 response within 3 seconds.
-                res.status(204).end()
-    
-                // Push notifications to a queue to be handled.
-                console.log(notifications);
+           let notifications = req.body;
+           res.status(204);
+            console.log(notifications);
+            if(notifications.collectionType === 'activities') {
+              updateData(req, notifications.ownerId);
+            }
+            // Fitbit subscription expects a 204 response within 3 seconds.
             
           break
         default:

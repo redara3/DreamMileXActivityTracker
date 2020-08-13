@@ -52,16 +52,11 @@ export default function LoginPage(props) {
   const [checked, setChecked] = React.useState([ 22]);
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(e.currentTarget.fitbitID.value);
-      const res = await fetch(`/api/user_fitbit/${fitbitID}`);
-    if (res.status === 200) {
-      const userObj = await res.json();
-      const response = await fetch(`/api/user_fitbit?type=revoke&fitbit_id=${userObj.fitbit_id}&access_token=${userObj.access_token}&refresh_token=${userObj.refresh_token}`);
+      
+      const response = await fetch(`/api/user_fitbit?type=revoke&fitbit_id=${fitbitID}`);
       const revokeResponseObj = await response.json();
-      router.push(`/?id=${revokeResponseObj.fitbit_id}&action=${revokeResponseObj.action}`);
-    } else {
-      console.log(userObj);
-    }
+      router.push(`/?id=${revokeResponseObj.fitbit_id}&action=${revokeResponseObj.action}&status=${revokeResponseObj.status}`);
+   
   }
 
   function handleTeamChange(event) {

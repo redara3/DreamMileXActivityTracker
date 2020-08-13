@@ -4,7 +4,7 @@ import nextConnect from 'next-connect';
 import middleware from '../../../middlewares/middleware';
 import _ from 'lodash';
 import { getUser } from '../../../lib/db';
-
+import { revokeAccess } from '../../../lib/fitbit';
 const clientId = process.env.FITBIT_CLIENT_ID;
 const clientSecret = process.env.FITBIT_CLIENT_SECRET;
 
@@ -16,7 +16,9 @@ handler.get(async (req, res) => {
   const db = req.db;
   if(req.query.type === 'revoke') {
     console.log(req.query);
-    const returnResponse = await revokeAccess(db, req.query.access_token, req.query.refresh_token, req.query.fitbit_id);
+    const returnResponse = await revokeAccess(req, req.query.fitbit_id);
+
+    // const returnResponse = await revokeAccess(db, req.query.access_token, req.query.refresh_token, req.query.fitbit_id);
     res.status(200).json(returnResponse)
   } else {
     console.log(req.query.code);
@@ -107,32 +109,32 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
   return {fitbit_id: fitbitId, action: 'link', status: 'success'};
 }
 
-const revokeAccess = async (db, access_token, refresh_token, fitbit_id) => {
-  const secret = clientId + ':' + clientSecret;
-   await fetch(`https://api.fitbit.com/oauth2/revoke?token=${access_token}`, {
-    method: 'POST',
+// const revokeAccess = async (db, access_token, refresh_token, fitbit_id) => {
+//   const secret = clientId + ':' + clientSecret;
+//    await fetch(`https://api.fitbit.com/oauth2/revoke?token=${access_token}`, {
+//     method: 'POST',
     
-    headers: {
-      'Authorization': `Basic ${btoa(secret)}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  });
+//     headers: {
+//       'Authorization': `Basic ${btoa(secret)}`,
+//       'Content-Type': 'application/x-www-form-urlencoded'
+//     }
+//   });
   
-  await fetch(`https://api.fitbit.com/oauth2/revoke?token=${refresh_token}`, {
-    method: 'POST',
+//   await fetch(`https://api.fitbit.com/oauth2/revoke?token=${refresh_token}`, {
+//     method: 'POST',
     
-    headers: {
-      'Authorization': `Basic ${btoa(secret)}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  });
-  db.collection("data").deleteOne({"user.fitbit_id": fitbit_id}, function(err, res) {
-    if (err) throw err;
-    console.log("1 document deleted");
-  });
-  return {fitbit_id: fitbit_id, action: 'revoke', status: 'success'};
+//     headers: {
+//       'Authorization': `Basic ${btoa(secret)}`,
+//       'Content-Type': 'application/x-www-form-urlencoded'
+//     }
+//   });
+//   db.collection("data").deleteOne({"user.fitbit_id": fitbit_id}, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document deleted");
+//   });
+//   return {fitbit_id: fitbit_id, action: 'revoke', status: 'success'};
   
-}
+// }
 
 
 

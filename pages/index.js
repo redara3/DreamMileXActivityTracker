@@ -54,16 +54,28 @@ export default function Index() {
       />
       <Parallax filter responsive image={'./images/running-bg.jpg'}>
         <div className={classes.container}>
-        {query.action === 'revoke' ? <SnackbarContent
+        {query.action === 'revoke' &&  query.status === 'success'? <SnackbarContent
         message={
           <span>
-            <b>SUCCESS ALERT:</b> You have successfully revoked your fitbit data tracking. Your data will be removed from the application.
+            <b>SUCCESS</b> You have successfully revoked your fitbit data tracking. Your data will be removed from the application.
           </span>
         }
         close
         color="success"
         icon={Check}
-      /> : query.action === 'link' ? <SnackbarContent
+      /> : query.action === 'revoke' &&  query.status === 'failure' ?
+      
+      <SnackbarContent
+        message={
+          <span>
+            <b>WARNING </b> Failed to revoke your fitbit with ID: {query.id} data tracking.
+          </span>
+        }
+        close
+        color="warning"
+        icon={Warning}/> : <div/>}
+      
+      {query.action === 'link' ? <SnackbarContent
       message={
         <span>
           <b>SUCCESS ALERT:</b> You have successfully linked your fitbit data tracking. Your id is {query.id}. Make a note of it.
