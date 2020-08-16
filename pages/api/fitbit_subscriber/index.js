@@ -14,11 +14,11 @@ export default function handler(req, res) {
             }
             break;
         case 'POST':
-           let notifications = req.body;
-           console.log(notifications);
-            // if(notifications.collectionType === 'activities') {
-              // updateData(req, notifications.ownerId);
-            // }
+            let notifications = req.body;
+            console.log(notifications);
+            if(notifications.collectionType === 'activities') {
+              updateData(req, notifications.ownerId);
+            }
            res.status(204).end();
             
           break

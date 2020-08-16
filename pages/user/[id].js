@@ -10,6 +10,9 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Link from 'next/link';
+
+import ChartistGraph from "react-chartist";
+import Button from "../../components/CustomButtons/Button.js";
 import Header from "../../components/Header/Header.js";
 import HeaderLinks from "../../components/Header/HeaderLinks.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
@@ -30,6 +33,11 @@ import NavPills from "../../components/NavPills/NavPills.js";
 import { makeStyles } from "@material-ui/core/styles";
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
+import _ from 'lodash';
+import {
+  dailyStepsChart,
+  dailyDistanceChart
+} from "../../lib/charts.js";
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
@@ -41,12 +49,28 @@ const useStyles = makeStyles(styles);
 
 export default function User() {
   const classes = useStyles();
+
+
+  const onSync = async (e) => {
+    const response = await fetch(`/api/user_fitbit/${fitbit_id}?type=sync`);
+      
+  }
+
   const { query } = useRouter()
   const { data, error } = useSWR(`/api/user_fitbit/${query.id}`, fetcher)
 
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>
-  console.log(data);
+  const fitbit_id = data.fitbit_id;
+  const stepsData = {
+    labels: data.activities_steps.map(_.values),
+    series: [_.values(data.activities_steps)]
+  };
+  const distanceData = {
+    labels: data.activities_distance.map(_.values),
+    series:  [_.values(data.activities_distance)]
+  }
+  
   return (
     <div>
       <Header
@@ -74,92 +98,78 @@ export default function User() {
       <Clearfix/>
       
       <GridContainer>
-            <GridItem xs={12} sm={12} md={8} lg={12}>
+            <GridItem xs={12} sm={12} md={12} lg={12} align='right'>
+            <Button round color='info' onClick={onSync}>
+                Sync Now
+              </Button>
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12} lg={12}>
+              <Card>
               <NavPills
-                color="primary"
+                color="info"
                 tabs={[
                   {
                     tabButton: "Information",
                     tabIcon: Dashboard,
                     tabContent: (
-                      <span>
-                        <p>
-                          Collaboratively administrate empowered markets via
-                          plug-and-play networks. Dynamically procrastinate B2C
-                          users after installed base benefits.
-                        </p>
-                        <br />
-                        <p>
-                          Dramatically visualize customer directed convergence
-                          without revolutionary ROI. Collaboratively
-                          administrate empowered markets via plug-and-play
-                          networks. Dynamically procrastinate B2C users after
-                          installed base benefits.
-                        </p>
-                        <br />
-                        <p>
-                          Dramatically visualize customer directed convergence
-                          without revolutionary ROI. Collaboratively
-                          administrate empowered markets via plug-and-play
-                          networks. Dynamically procrastinate B2C users after
-                          installed base benefits.
-                        </p>
-                      </span>
+                      <Card>
+                      <CardHeader color="info">
+                        <ul>
+                          <li>Name: {data.displayName}</li>
+                          <li>Team Name: {data.teamName}</li>
+                          <li>Chalenge Type: {data.challengeType}</li>
+                        </ul>
+                     </CardHeader>
+                     </Card> 
                     )
                   },
                   {
-                    tabButton: "Schedule",
+                    tabButton: "Distance",
                     tabIcon: Schedule,
                     tabContent: (
-                      <span>
-                        <p>
-                          Efficiently unleash cross-media information without
-                          cross-media value. Quickly maximize timely
-                          deliverables for real-time schemas.
-                        </p>
-                        <br />
-                        <p>
-                          Dramatically maintain clicks-and-mortar solutions
-                          without functional solutions. Dramatically visualize
-                          customer directed convergence without revolutionary
-                          ROI. Collaboratively administrate empowered markets
-                          via plug-and-play networks. Dynamically procrastinate
-                          B2C users after installed base benefits.
-                        </p>
-                      </span>
+                      <Card>
+            <CardHeader color="info">
+            <ChartistGraph
+                className="ct-chart"
+                data={distanceData}
+                type="Line"
+                options={dailyDistanceChart.options}
+                listener={dailyDistanceChart.animation}
+              />
+            </CardHeader>
+            <CardBody color="success">
+            <h4 className={classes.cardTitle}>Daily Distance</h4>
+              <p className={classes.cardCategory}>Performance</p>
+            </CardBody>
+            
+          </Card>
                     )
                   },
                   {
-                    tabButton: "Tasks",
+                    tabButton: "Steps",
                     tabIcon: List,
                     tabContent: (
-                      <span>
-                        <p>
-                          Collaboratively administrate empowered markets via
-                          plug-and-play networks. Dynamically procrastinate B2C
-                          users after installed base benefits.
-                        </p>
-                        <br />
-                        <p>
-                          Dramatically visualize customer directed convergence
-                          without revolutionary ROI. Collaboratively
-                          administrate empowered markets via plug-and-play
-                          networks. Dynamically procrastinate B2C users after
-                          installed base benefits.
-                        </p>
-                        <br />
-                        <p>
-                          Dramatically visualize customer directed convergence
-                          without revolutionary ROI. Collaboratively
-                          administrate empowered markets via plug-and-play
-                          networks. Dynamically procrastinate B2C users after
-                          installed base benefits.
-                        </p>
-                      </span>
+                      <Card>
+            <CardHeader color="info">
+              <ChartistGraph
+                className="ct-chart"
+                data={stepsData}
+                type="Bar"
+                options={dailyStepsChart.options}
+                listener={dailyStepsChart.animation}
+              />
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Daily Steps</h4>
+              <p className={classes.cardCategory}>Performance</p>
+            </CardBody>
+            
+          </Card>
                     )
                   }
                 ]}
               />
+              </Card>
             </GridItem>
             
           </GridContainer>

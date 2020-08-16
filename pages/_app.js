@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../components/theme';
 
@@ -20,6 +21,10 @@ export default function MyApp(props) {
     <React.Fragment>
       <Head>
         <title>DreamMile X Tracker</title>
+        <link
+          rel="stylesheet"
+          href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css"
+        />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
