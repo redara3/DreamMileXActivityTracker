@@ -5,12 +5,13 @@ import _ from 'lodash';
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
 const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const redirectURI = process.env.GOOGLE_REDIRECT_URL;
 const {google} = require('googleapis');
 
 const oauth2Client = new google.auth.OAuth2(
   clientId,
   clientSecret,
-  'https://dream-mile-x-activity-tracker.vercel.app/api/user_google'
+  'http://localhost:3000/api/user_google'
 );
 
 const fitness = google.fitness('v1');
@@ -42,45 +43,49 @@ const getGoogleFitData = async (accessToken, tokenType, scope, db) => {
 
 
 
-  // const res = await fitness.users.dataSources({
-  //   userId: 'me',
+  const response = await fitness.users.dataSources.list({
+    userId: 'me',
     
-  //         requestBody: 
-  //      {
-  //            "aggregateBy": [{
-  //         // "dataTypeName": "com.google.step_count.delta",
-  //         "dataTypeName":"com.google.activity.summary",
-  //         "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps"
-  //       //    "dataTypeName": "com.google.distance.delta",
-  //       // "dataSourceId": "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta",
-  //       }],
-  //      "bucketByActivitySegment": {},
-  //      "bucketByActivityType": {},
-  //     "bucketBySession": {},
-  //      "bucketByTime": {"durationMillis": "86400000"},
-  //     //  "endTimeMillis": `${end_time}`,
-  //      "filteredDataQualityStandard": [],
-  //     //  "startTimeMillis": `${start_time}`
-  //     }
-  //          }
-  //       );
+      //     requestBody: 
+      //  {
+      //   "endTimeMillis": `${end_time}`,
+      //   //  "filteredDataQualityStandard": [],
+      //    "startTimeMillis": `${start_time}`
+      // //  "startTimeMillis": `${start_time}`
+      // }
+           }
+        );
 
+        console.log(response.data);
 
   const res = await fitness.users.dataset.aggregate({
   userId: 'me',
   
         requestBody: 
      {
-           "aggregateBy": [{
+           "aggregateBy": [
+             {
         // "dataTypeName": "com.google.step_count.delta",
-        "dataTypeName":"com.google.activity.summary",
+        "dataTypeName":"com.google.step_count.delta",
         "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps"
       //    "dataTypeName": "com.google.distance.delta",
       // "dataSourceId": "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta",
+      },
+      {
+        // "dataTypeName": "com.google.step_count.delta",
+        "dataTypeName":"com.google.distance.delta",
+        "dataSourceId": "raw:com.google.activity.segment:com.google.android.apps.fitness:user_input"
+      //    "dataTypeName": "com.google.distance.delta",
+      // "dataSourceId": "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta",
+      }, 
+      {
+        // "dataTypeName": "com.google.step_count.delta",
+        "dataTypeName":"com.google.merge_activity_segments",
+        "dataSourceId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments"
+      //    "dataTypeName": "com.google.distance.delta",
+      // "dataSourceId": "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta",
       }],
-     "bucketByActivitySegment": {},
-     "bucketByActivityType": {},
-    "bucketBySession": {},
+     
      "bucketByTime": {"durationMillis": "86400000"},
      "endTimeMillis": `${end_time}`,
     //  "filteredDataQualityStandard": [],
@@ -88,11 +93,36 @@ const getGoogleFitData = async (accessToken, tokenType, scope, db) => {
     }
          }
       );
+    //  console.log(res.data.bucket[0].dataset[0].point[0]);
+    //  console.log(res.data.bucket[1].dataset[0].point[0]);
+    //  console.log(res.data.bucket[2].dataset[0].point[0]);
+
+     const json = res.data;
      console.log(res.data.bucket[0].dataset[0].point[0]);
      console.log(res.data.bucket[1].dataset[0].point[0]);
-     console.log(res.data.bucket[2].dataset[0].point[0]);
+     
+     for(var b = 0; b < json.bucket.length; b++) {
+       // each bucket in our response should be a day
+       var bucketDate = new Date(parseInt(json.bucket[b].startTimeMillis, 10));
+       
+       var steps = -1;
+       var distance = -1;
+       
+       if (json.bucket[b].dataset[0].point.length > 0) {
+         steps = json.bucket[b].dataset[0].point[0].value[0].intVal;
+       }
+      
+       
+       if (json.bucket[b].dataset[1].point.length > 0) {
+         distance = json.bucket[b].dataset[1].point[0].value[0].fpVal;
+       }
 
-
+       console.log(bucketDate);
+       console.log(steps);
+       console.log(distance);
+       
+       
+     }
   // let response = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate`, {
   //   method: 'POST',
   //   body: {
