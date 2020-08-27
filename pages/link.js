@@ -160,9 +160,7 @@ export default function LoginPage(props) {
                   hoverColor="info"
                   onClick={handleChallengeChange}
                   dropdownList={[
-                    {select: true, value: "50K", displayLabel:"September 50 Kilometers"},
                     {select: true, value: "50M", displayLabel:"September 50 Miles"},
-                    {select: true, value: "100K", displayLabel:"September 100 Kilometers"},
                     {select: true, value: "100M", displayLabel:"September 100 Miles"},
                     {select: true, value: "5000S", displayLabel:"5,000 Daily Steps Average"},
                     {select: true, value: "10000S", displayLabel:"10,000 Daily Steps Average"},

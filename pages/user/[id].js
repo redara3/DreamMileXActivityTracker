@@ -63,11 +63,11 @@ export default function User() {
   if (!data) return <div>Loading...</div>
   const fitbit_id = data.fitbit_id;
   const stepsData = {
-    labels: data.activities_steps.map(_.values),
+    labels: !_.isEmpty(data.activities_steps) && data.activities_steps.length > 0 ? data.activities_steps.map(_.values):[],
     series: [_.values(data.activities_steps)]
   };
   const distanceData = {
-    labels: data.activities_distance.map(_.values),
+    labels: !_.isEmpty(data.activities_distance) && data.activities_distance.length > 0 ? data.activities_distance.map(_.values): [],
     series:  [_.values(data.activities_distance)]
   }
   

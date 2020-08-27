@@ -40,6 +40,8 @@ export default function Index() {
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>
   
+  const challenges = _.map(data, 'challenge');
+
   return (
     <div>
       <Header
@@ -87,20 +89,22 @@ export default function Index() {
     />: ''}
       <Clearfix/>
       
+      {challenges.map(challenge => (
         <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <Card chart>
         
-            <CardBody>
-              <h4 className={classes.cardTitle}>Highest Distance</h4>
+            <CardBody >
+              <h4 className={classes.cardTitle}>Total Distance</h4>
+              <h3 className={classes.cardTitle}>Dream Mile X Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h3>
               <p className={classes.cardCategory}>
                 
-                {_.maxBy(data, 'totalDistance').name}
+                {_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').name}
               </p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-              {_.maxBy(data, 'totalDistance').totalDistance}
+              {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance)}
               </div>
             </CardFooter>
           </Card>
@@ -109,44 +113,54 @@ export default function Index() {
           <Card chart>
             
             <CardBody>
-            <h4 className={classes.cardTitle}>Highest Steps</h4>
+            <h4 className={classes.cardTitle}>Total Steps</h4>
+            <h3 className={classes.cardTitle}>Dream Mile X Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h3>
               <p className={classes.cardCategory}>
                 
-                {_.maxBy(data, 'totalSteps').name}
+                {_.maxBy(_.find(data, {challenge:challenge}).users, 'totalSteps').name}
               </p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-              {_.maxBy(data, 'totalSteps').totalSteps}
+              {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalSteps').totalSteps)}
               </div>
             </CardFooter>
           </Card>
         </GridItem>
         
       </GridContainer>
+      ))}
         </div>
       </Parallax>
+      {challenges.map(challenge => (
        <GridContainer>
          
        <GridItem xs={12} sm={12} md={12}>
           <Card>
+          <CardHeader color="info">
+            <h4 className={classes.cardTitleWhite}>Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h4>
+            <p className={classes.cardCategoryWhite}>
+              Leaderboard
+            </p>
+          </CardHeader>
             <CardBody>
               <Table
-                tableHeaderColor = "info"
-                tableHead={[
-                  // { title: "ID", field: "id" },
-                  { title: "Name", field: "name", cellStyle: {
-                    color: "inherit",
-                  }, headerStyle: {
-                    backgroundColor: '#039be5',
-                  } },
-                  { title: "Team", field: "team" },
-                  { title: "Challenge", field: "challenge" },
-                  { title: "Total Distance", field: "totalDistance" },
-                  { title: "Total Steps", field: "totalSteps" }
-                  
-                ]}
-                tableData={data}
+                tableHeaderColor="info"
+                tableHead={[ "Name", "Team", "Challenge", "Total Distance (Miles)", "Total Steps", "Average Daily Steps"]}
+                tableData={_.map(_.find(data, {challenge:challenge}).users, function(item) {
+                  const row = [];
+                  const link = `/user/${item.id}`;
+                  row.push(<Link href={link}>
+                      <a>{item.name}</a></Link>);
+                  row.push(item.team);
+                  row.push(item.challenge.replace('M',' Miles').replace('S',' Steps'));
+                  row.push(_.round(item.totalDistance));
+                  row.push(_.round(item.totalSteps));
+                  row.push(_.round(item.averageSteps));
+                  row.push("Running");
+                  // row.push(item.recent);
+                  return row;
+                })}
               />
 
 
@@ -155,7 +169,7 @@ export default function Index() {
           </Card>
         </GridItem>
         </GridContainer>
-
+))}
 
     </div>
   );

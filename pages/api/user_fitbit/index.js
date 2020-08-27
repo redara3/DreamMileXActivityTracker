@@ -96,12 +96,21 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
     console.log(stepsJson);
 });
 
+response = await fetch(`https://api.fitbit.com/1/user/-/activities/recent.json`, {
+    
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+  const recent = await response.json(); //extract JSON from the http response
+  console.log(recent);
+
 
   console.log(stepsJson)
   _.mapKeys(stepsJson, function(value, key){
     return _.replace(key, "-","_")
   })
-  const dbDocument = _.merge( userJson, distanceJson, stepsJson);
+  const dbDocument = _.merge( userJson, distanceJson, stepsJson, recent);
   db.collection("data").replaceOne({"user.fitbit_id": fitbitId}, dbDocument, { upsert: true }, function(err, res) {
     if (err) throw err;
     console.log("1 document replaced");

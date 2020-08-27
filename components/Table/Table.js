@@ -4,49 +4,22 @@ import { forwardRef } from 'react';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
-import MaterialTable from "material-table";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+
+import Typography from '@material-ui/core/Typography';
 // core components
 import styles from "../jss/nextjs-material-kit/components/tableStyle.js";
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
 
-const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+
 
 
 const useStyles = makeStyles(styles);
@@ -54,29 +27,15 @@ const useStyles = makeStyles(styles);
 export default function CustomTable(props) {
   const classes = useStyles();
   const { tableHead, tableData, tableHeaderColor } = props;
+  const [open, setOpen] = React.useState(false);
   return (
     <div className={classes.tableResponsive}>
-      <MaterialTable icons={tableIcons} options={{
-        headerStyle: {
-          backgroundColor: '#01579b',
-          color: '#FFF'
-        }
-      }} className={classes.table} columns={tableHead}
-      title="Activity Summary"
-        data ={tableData} 
-        
-        options={{
-          headerStyle: {
-            backgroundColor: '#01579b',
-            color: '#FFF'
-          }
-        }}>
-       
-      </MaterialTable>
-      {/* <Table className={classes.table}>
+     
+      <Table className={classes.table}>
         {tableHead !== undefined ? (
           <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
             <TableRow className={classes.tableHeadRow}>
+            <TableCell />
               {tableHead.map((prop, key) => {
                 return (
                   <TableCell
@@ -93,7 +52,13 @@ export default function CustomTable(props) {
         <TableBody>
           {tableData.map((prop, key) => {
             return (
+              <React.Fragment>
               <TableRow key={key} className={classes.tableBodyRow}>
+                <TableCell>
+                <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
                 {prop.map((prop, key) => {
                   return (
                     <TableCell className={classes.tableCell} key={key}>
@@ -102,16 +67,47 @@ export default function CustomTable(props) {
                   );
                 })}
               </TableRow>
+              <TableRow>
+              <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography gutterBottom component="div">
+                Recent Activity
+              </Typography>
+              <Table size="small">
+                <TableHead>
+                  <TableRow className={classes.tableBodyRow}>
+                    <TableCell className={classes.tableCell}>Description</TableCell>
+                    <TableCell className={classes.tableCell}>Name</TableCell>
+                  </TableRow>
+                </TableHead>
+                {/* <TableBody>
+                  {prop.recent.map((activities) => (
+                    <TableRow key={activities.activityId}>
+                      <TableCell className={classes.tableCell} component="th" scope="row">
+                        {activities.description}
+                      </TableCell>
+                      <TableCell> className={classes.tableCell}{activities.name}</TableCell>
+                      
+                    </TableRow>
+                  ))}
+                </TableBody> */}
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+              </TableRow>
+              </React.Fragment>
             );
           })}
         </TableBody>
-      </Table> */}
+      </Table>
     </div>
   );
 }
 
 CustomTable.defaultProps = {
-  tableHeaderColor: "gray"
+  tableHeaderColor: "info"
 };
 
 CustomTable.propTypes = {
