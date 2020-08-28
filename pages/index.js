@@ -76,7 +76,7 @@ export default function Index() {
       <SnackbarContent
         message={
           <span>
-            <b>WARNING </b> Failed to revoke your fitbit with ID: {query.id} data tracking.
+            <b>WARNING </b> Failed to revoke your fitbit with ID: {query.id} data tracking. <br/> Please check your id: {query.id} by clicking on your name and noting the id from the URL.
           </span>
         }
         close
@@ -92,7 +92,17 @@ export default function Index() {
       close
       color="success"
       icon={Check}
-    />: ''}
+    />: query.action === 'link' &&  query.status === 'failure' ?
+      
+    <SnackbarContent
+      message={
+        <span>
+          <b>WARNING </b> Failed to sync your fitbit data tracking. <br/> Please try again
+        </span>
+      }
+      close
+      color="warning"
+      icon={Warning}/> : <div/>}
       <Clearfix/>
       <GridContainer>
       {challenges.map(challenge => (

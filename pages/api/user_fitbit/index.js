@@ -39,8 +39,10 @@ const getaccessTokenFromCode = async (code, state, db) => {
     }
   });
   const authJson = await response.json(); //extract JSON from the http response
-  console.log(authJson);
   const fitbit_id = authJson.user_id;
+  if(_.isEmpty(fitbit_id)) {
+    return {fitbit_id: fitbit_id, action: 'link', status: 'failure'};
+  }
   return await getProfile(authJson.access_token, authJson.refresh_token, state, fitbit_id, db);
 }
 
