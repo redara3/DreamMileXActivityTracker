@@ -34,6 +34,7 @@ import CustomDropdown from "../components/CustomDropdown/CustomDropdown.js";
 import Checkbox from "@material-ui/core/Checkbox";
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
+import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles(styles);
 
@@ -47,13 +48,14 @@ export default function LoginPage(props) {
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('');
   const [challengeType, setChallengeType] = useState('50M');
+  const [baseDate, setBaseDate] = useState('2020-08-23');
   const [checked, setChecked] = React.useState([ 22]);
   function onSubmit(event) {
     event.preventDefault();
     console.log(event.currentTarget.name.value);
     console.log(event.currentTarget.teamName.value);
     
-    const state = JSON.stringify({name:name, teamName: teamName, challengeType: challengeType});
+    const state = JSON.stringify({name:name, teamName: teamName, challengeType: challengeType, baseDate: baseDate});
     
     window.location.href=`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BVL5&redirect_uri=https%3A%2F%2Fdream-mile-x-activity-tracker.vercel.app%2Fapi%2Fuser_fitbit&scope=activity&expires_in=604800&state=${state}`
   }
@@ -147,6 +149,21 @@ export default function LoginPage(props) {
                       
                       }}
                       onChange= {handleTeamChange}
+                    />
+                    
+      <CustomInput
+                      labelText=""
+                      id="baseDate"
+                      name="baseDate"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        type: "text",
+                        readOnly: true,
+                        disabled: true,
+                        value: 'Start Date: 2020-08-23'
+                      }}
                     />
                   <CustomDropdown
                   showSelected

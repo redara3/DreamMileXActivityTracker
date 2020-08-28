@@ -32,18 +32,25 @@ import {
       color: grayColor[0]
     },
     table: {
-      marginBottom: "0",
+      marginBottom: "2",
       width: "100%",
       maxWidth: "100%",
       backgroundColor: "transparent",
       borderSpacing: "0",
       borderCollapse: "collapse"
     },
-    tableHeadCell: {
-      color: "inherit",
+    tableHeadCellInfo: {
+      color: infoColor,
       ...defaultFont,
       "&, &$tableCell": {
-        fontSize: "1em"
+        fontSize: "1.1em"
+      }
+    },
+    tableHeadCellSuccess: {
+      color: successColor,
+      ...defaultFont,
+      "&, &$tableCell": {
+        fontSize: "1.1em"
       }
     },
     tableCell: {
@@ -71,6 +78,14 @@ import {
       display: "table-row",
       outline: "none",
       verticalAlign: "middle"
+    },
+    linkInfo: {
+      textDecoration: "none",
+      color: infoColor,
+    },
+    linkSuccess: {
+      textDecoration: "none",
+      color: successColor,
     }
   });
   

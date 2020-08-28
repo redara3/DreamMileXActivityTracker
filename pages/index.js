@@ -24,13 +24,17 @@ import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 import Footer from "../components/Footer/Footer.js";
 
+import Badge from "../components/Badge/Badge.js";
+
+import Link from 'next/link';
+
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import _ from 'lodash'
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
-
+import classNames from "classnames";
 
 import styles from "../components/jss/nextjs-material-kit/pages/landingPage.js";
 
@@ -115,11 +119,11 @@ export default function Index() {
             </CardHeader>
             <CardBody >
                <p className={classes.cardCategory}>
-                <ul>
-                <li>Leader: {_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').name}</li>
-                <li>Total Distance: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance)} Miles</li>
-                <li>Average Daily Steps: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').averageSteps)}</li>
-                </ul>
+                
+                <Badge color={challenge.indexOf('M') == -1 ? "info": "success"}>Leader: {_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').name}</Badge>
+                <br/>Total Distance: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance)} Miles
+                <br/>Average Daily Steps: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').averageSteps)}
+                
               </p>
             </CardBody>
             
@@ -132,6 +136,7 @@ export default function Index() {
       </GridContainer>
         </div>
       </Parallax>
+      <div className={classNames(classes.main, classes.mainRaised)}>
       {challenges.map(challenge => (
        <GridContainer>
          
@@ -143,8 +148,8 @@ export default function Index() {
             
           </CardHeader>
             <CardBody>
-              <Table
-                tableHead={[ "Name", "Team", "Challenge", "Total Distance (Miles)", "Total Steps", "Average Daily Steps"]}
+              <Table tableHeaderColor={challenge.indexOf('M') == -1 ? "info": "success"}
+                tableHead={[ "Rank", "Name", "Team", "Challenge", "Distance (Miles)", "Past Days", "Average Daily Steps", "Progress", "Last Updated"]}
                 tableData={_.map(_.find(data, {challenge:challenge}).users)}
               />
 
@@ -154,7 +159,9 @@ export default function Index() {
           </Card>
         </GridItem>
         </GridContainer>
+       
 ))}
+ </div>
 <Footer whiteFont />
     </div>
   );

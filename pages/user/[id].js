@@ -1,7 +1,7 @@
 
 
 
-import React from 'react';
+import React, {useState} from 'react';
 import Card from "../../components/Card/Card.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardHeader from "../../components/Card/CardHeader.js";
@@ -43,15 +43,16 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 
 
 import styles from "../../components/jss/nextjs-material-kit/pages/landingPage.js";
+import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles(styles);
 
 export default function User() {
   const classes = useStyles();
   const router = useRouter(); 
-
+  const [baseDate, setBaseDate] = useState('2020-08-23');
   const onSync = async (e) => {
-    const response = await fetch(`/api/user_fitbit/${fitbit_id}?type=sync`);
+    const response = await fetch(`/api/user_fitbit/${fitbit_id}?type=sync&baseDate=${baseDate}`);
     const syncResponseObj = await response.json();
     
   }
@@ -63,12 +64,12 @@ export default function User() {
   if (!data) return <div>Loading...</div>
   const fitbit_id = data.fitbit_id;
   const stepsData = {
-    labels: !_.isEmpty(data.activities_steps) && data.activities_steps.length > 0 ? data.activities_steps.map(_.values):[],
-    series: [_.values(data.activities_steps)]
+    labels: !_.isEmpty(data.activities_steps) && data.activities_steps.length > 0 ? (data.activities_steps.map(_.values).slice(-10)):[],
+    series: [_.values(data.activities_steps.slice(-10))]
   };
   const distanceData = {
-    labels: !_.isEmpty(data.activities_distance) && data.activities_distance.length > 0 ? data.activities_distance.map(_.values): [],
-    series:  [_.values(data.activities_distance)]
+    labels: !_.isEmpty(data.activities_distance) && data.activities_distance.length > 0 ? data.activities_distance.map(_.values).slice(-10): [],
+    series:  [_.values(data.activities_distance).slice(-10)]
   }
   
   return (
@@ -119,6 +120,22 @@ export default function User() {
       
       <GridContainer>
             <GridItem xs={12} sm={12} md={12} lg={12} align='right'>
+            <TextField
+        id="baseDate"
+        label="Start Date"
+        type="date"
+        defaultValue="2020-08-23"
+        inputProps={{
+          readOnly: true,
+          disabled: true,
+          className: classes.dateWhite
+        }}
+        InputLabelProps={{
+          shrink: true,
+          className: classes.dateWhite
+        }}
+      />
+      
             <Button round color='info' onClick={onSync}>
                 Sync Now
               </Button>
@@ -132,23 +149,23 @@ export default function User() {
                     tabButton: "Information",
                     tabIcon: InfoIcon,
                     tabContent: (
-                      <Card>
                       
-                     <CardBody>
+                      
+                     <CardBody className={classes.cardCategory}>
                      <ul>
                           <li>Name: {data.displayName}</li>
                           <li>Team Name: {data.teamName}</li>
                           <li>Challenge Type: {data.challengeType.replace('M',' Miles').replace('S',' Steps')}</li>
                         </ul>
                      </CardBody>
-                     </Card> 
+                    
                     )
                   },
                   {
                     tabButton: "Distance",
                     tabIcon: DirectionsRunIcon,
                     tabContent: (
-                      <Card>
+                      
             
             <CardBody>
             <ChartistGraph
@@ -160,14 +177,14 @@ export default function User() {
               />
             </CardBody>
             
-          </Card>
+          
                     )
                   },
                   {
                     tabButton: "Steps",
                     tabIcon: DirectionsWalkIcon,
                     tabContent: (
-                      <Card>
+                      
            
             <CardBody>
             <ChartistGraph
@@ -179,7 +196,7 @@ export default function User() {
               />
             </CardBody>
             
-          </Card>
+          
                     )
                   }
                 ]}

@@ -7,6 +7,8 @@ import { getUser } from '../../../lib/db';
 import { revokeAccess } from '../../../lib/fitbit';
 const clientId = process.env.FITBIT_CLIENT_ID;
 const clientSecret = process.env.FITBIT_CLIENT_SECRET;
+import moment from 'moment';
+
 
 const handler = nextConnect();
 
@@ -49,25 +51,27 @@ const getaccessTokenFromCode = async (code, state, db) => {
 const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
 
   let userJson = {user: {access_token: accessToken, refresh_token: refreshToken, displayName: JSON.parse(state).name, teamName: JSON.parse(state).teamName,challengeType: JSON.parse(state).challengeType, fitbit_id: fitbitId}};
+  let baseDate = JSON.parse(state).baseDate;
   
-  await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/${fitbitId}.json`, {
-    method: "POST",
-    headers: {
-        "Authorization": `Bearer ${accessToken}`
-    }
-  }).catch(e => e);
+  const endDate = moment(new Date()).format('YYYY-MM-DD');
+  // await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/${fitbitId}.json`, {
+  //   method: "POST",
+  //   headers: {
+  //       "Authorization": `Bearer ${accessToken}`
+  //   }
+  // }).catch(e => e);
 
   
 
-  db.collection("users").replaceOne({
+  // db.collection("users").replaceOne({
       
-    "user.fitbit_id": fitbitId,
-  }, userJson, { upsert: true }, function(err, res) {
-    if (err) throw err;
-    console.log("1 document replaced");
-  });
+  //   "user.fitbit_id": fitbitId,
+  // }, userJson, { upsert: true }, function(err, res) {
+  //   if (err) throw err;
+  //   console.log("1 document replaced");
+  // });
 
- let response = await fetch(`https://api.fitbit.com/1/user/-/activities/distance/date/today/1m.json`, {
+ let response = await fetch(`https://api.fitbit.com/1/user/-/activities/distance/date/${baseDate}/${endDate}.json`, {
     
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -81,7 +85,7 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
     console.log(distanceJson);
 });
   
- response = await fetch(`https://api.fitbit.com/1/user/-/activities/steps/date/today/1m.json`, {
+ response = await fetch(`https://api.fitbit.com/1/user/-/activities/steps/date/${baseDate}/${endDate}.json`, {
     
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -108,7 +112,7 @@ response = await fetch(`https://api.fitbit.com/1/user/-/activities/recent.json`,
   _.mapKeys(stepsJson, function(value, key){
     return _.replace(key, "-","_")
   })
-  const dbDocument = _.merge( userJson, distanceJson, stepsJson, {recent: recent});
+  const dbDocument = _.merge( userJson, distanceJson, stepsJson, {recent: recent, lastUpdated: _.now()});
   db.collection("data").replaceOne({"user.fitbit_id": fitbitId}, dbDocument, { upsert: true }, function(err, res) {
     if (err) throw err;
     console.log("1 document replaced");

@@ -14,136 +14,40 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import TableContainer from '@material-ui/core/TableContainer';
 
+import Badge from "../Badge/Badge.js";
+import moment from 'moment';
+
 import Typography from '@material-ui/core/Typography';
 // core components
 import styles from "../jss/nextjs-material-kit/components/tableStyle.js";
 
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import Paper from '@material-ui/core/Paper';
 
 import Link from 'next/link';
 
 const useStyles = makeStyles(styles);
 
-// export default function CustomTable(props) {
-//   const classes = useStyles();
-//   const { tableHead, tableData, tableHeaderColor } = props;
-//   const [open, setOpen] = React.useState(false);
-//   return (
-//     <div className={classes.tableResponsive}>
-     
-//       <Table className={classes.table}>
-//         {tableHead !== undefined ? (
-//           <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
-//             <TableRow className={classes.tableHeadRow}>
-//             <TableCell />
-//               {tableHead.map((prop, key) => {
-//                 return (
-//                   <TableCell
-//                     className={classes.tableCell + " " + classes.tableHeadCell}
-//                     key={key}
-//                   >
-//                     {prop}
-//                   </TableCell>
-//                 );
-//               })}
-//             </TableRow>
-//           </TableHead>
-//         ) : null}
-//         <TableBody>
-//           {tableData.map((prop, key) => {
-//             return (
-//               <React.Fragment>
-//               <TableRow key={key} className={classes.tableBodyRow}>
-//                 <TableCell>
-//                 <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-//             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-//           </IconButton>
-//         </TableCell>
-//                 {prop.map((prop, key) => {
-//                   return (
-//                     <TableCell className={classes.tableCell} key={key}>
-//                       {prop}
-//                     </TableCell>
-//                   );
-//                 })}
-//               </TableRow>
-//               <TableRow>
-//               <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-//           <Collapse in={open} timeout="auto" unmountOnExit>
-//             <Box margin={1}>
-//               <Typography gutterBottom component="div">
-//                 Recent Activity
-//               </Typography>
-//               <Table size="small">
-//                 <TableHead>
-//                   <TableRow className={classes.tableBodyRow}>
-//                     <TableCell className={classes.tableCell}>Description</TableCell>
-//                     <TableCell className={classes.tableCell}>Name</TableCell>
-//                     <TableCell className={classes.tableCell}>Duration</TableCell>
-//                   </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                   {/* {prop.recent.map((activities) => (
-//                     <TableRow key={activities.activityId}>
-//                       <TableCell className={classes.tableCell} component="th" scope="row">
-//                         {activities.description}
-//                       </TableCell>
-//                       <TableCell> className={classes.tableCell}{activities.name}</TableCell>
-                      
-//                     </TableRow>
-//                   ))} */}
-                  
-//                     <TableRow>
-//                       <TableCell className={classes.tableCell} component="th" scope="row">
-//                         Running
-//                       </TableCell>
-                      
-//                     </TableRow>
-                  
-//                 </TableBody>
-//               </Table>
-//             </Box>
-//           </Collapse>
-//         </TableCell>
-//               </TableRow>
-//               </React.Fragment>
-//             );
-//           })}
-//         </TableBody>
-//       </Table>
-//     </div>
-//   );
-// }
-
-// CustomTable.defaultProps = {
-//   tableHeaderColor: "info"
-// };
-
-// CustomTable.propTypes = {
-//   tableHeaderColor: PropTypes.oneOf([
-//     "warning",
-//     "primary",
-//     "danger",
-//     "success",
-//     "info",
-//     "rose",
-//     "gray"
-//   ]),
-//   tableHead: PropTypes.arrayOf(PropTypes.string),
-//   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
-// };
-
-
-
 
 function Row(props) {
-  const { row } = props;
+  const { row, index, tableHeaderColor } = props;
   const [open, setOpen] = React.useState(false);
   
   const classes = useStyles();
   const link = `/user/${row.id}`;
+  const challengeType = row.challenge;
+  const numStepsOrDistanceChallenge = challengeType.substring(challengeType.length-1); 
+  console.log(numStepsOrDistanceChallenge);
+  let icon = 'Do not know!';
+  if(numStepsOrDistanceChallenge.length > 4) {
+    icon = parseInt(_.round(row.averageSteps)) > parseInt(numStepsOrDistanceChallenge) ? 'On Track!' : 'Keep going!'
+  } else {
+    icon = parseInt(_.round(row.totalDistance/row.numDays) * 30) > parseInt(numStepsOrDistanceChallenge) ? 'On Track!' : 'Keep going!'
+  }
+  
   return (
     <React.Fragment>
       <TableRow className={classes.tableHeadRow}>
@@ -152,15 +56,18 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
+        <TableCell><Badge color={tableHeaderColor}>{index}</Badge></TableCell>
         <TableCell className={classes.tableCell} component="th" scope="row">
         {<Link href={link}>
-                      <a>{row.name}</a></Link>}
+                      <a className={tableHeaderColor=='info' ? classes.linkInfo: classes.linkSuccess}>{row.name}</a></Link>}
         </TableCell>
         <TableCell className={classes.tableCell}>{row.team}</TableCell>
         <TableCell className={classes.tableCell}>{row.challenge.replace('M',' Miles').replace('S',' Steps')}</TableCell>
         <TableCell className={classes.tableCell}>{_.round(row.totalDistance)}</TableCell>
-        <TableCell className={classes.tableCell}>{_.round(row.totalSteps)}</TableCell>
+        <TableCell className={classes.tableCell}>{_.round(row.numDays)}</TableCell>
         <TableCell className={classes.tableCell}>{_.round(row.averageSteps)}</TableCell>
+        <TableCell className={classes.tableCell}><Badge color={tableHeaderColor}>{icon}</Badge></TableCell>
+        <TableCell className={classes.tableCell}>{row.lastUpdated ? moment(row.lastUpdated).fromNow() : 'No update'}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -204,13 +111,13 @@ export default function CollapsibleTable(props) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
-        <TableHead>
+         <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
         <TableRow className={classes.tableHeadRow}>
              <TableCell />
                {tableHead.map((prop, key) => {
                 return (
                   <TableCell
-                    className={classes.tableCell + " " + classes.tableHeadCell}
+                    className={tableHeaderColor == 'info'? classes.tableHeadCellInfo :classes.tableHeadCellSuccess }
                     key={key}
                   >
                     {prop}
@@ -220,8 +127,8 @@ export default function CollapsibleTable(props) {
              </TableRow>
         </TableHead>
         <TableBody>
-          {tableData.map((row) => (
-            <Row key={row.id} row={row} />
+          {tableData.map((row, index) => (
+            <Row key={row.id} index={index+1} row={row} tableHeaderColor={tableHeaderColor} />
           ))}
         </TableBody>
       </Table>
