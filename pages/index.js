@@ -6,7 +6,6 @@ import CardFooter from "../components/Card/CardFooter.js";
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Link from 'next/link';
 import Header from "../components/Header/Header.js";
 import HeaderLinks from "../components/Header/HeaderLinks.js";
 import GridContainer from "../components/Grid/GridContainer.js";
@@ -19,6 +18,13 @@ import Pagination from "../components/Pagination/Pagination.js";
 import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
+
+import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
+import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
+import Footer from "../components/Footer/Footer.js";
+
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import _ from 'lodash'
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
@@ -46,7 +52,7 @@ export default function Index() {
     <div>
       <Header
         color="transparent"
-        brand="Vibha DreamMileX"
+        brand="DreamMile X Tracker Home"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -88,48 +94,32 @@ export default function Index() {
       icon={Check}
     />: ''}
       <Clearfix/>
-      
+      <GridContainer>
       {challenges.map(challenge => (
-        <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <Card chart>
-        
+            <CardHeader color=
+              {challenge.indexOf('M') == -1 ? "info": "success"}>
+              {challenge.indexOf('M') == -1 ? <DirectionsWalkIcon/> : <DirectionsRunIcon/> } <h3 className={classes.cardTitle}>Dream Mile X Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h3>
+             
+            </CardHeader>
             <CardBody >
-              <h4 className={classes.cardTitle}>Total Distance</h4>
-              <h3 className={classes.cardTitle}>Dream Mile X Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h3>
-              <p className={classes.cardCategory}>
-                
-                {_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').name}
+               <p className={classes.cardCategory}>
+                <ul>
+                <li>Leader: {_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').name}</li>
+                <li>Total Distance: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance)} Miles</li>
+                <li>Average Daily Steps: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').averageSteps)}</li>
+                </ul>
               </p>
             </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-              {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance)}
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={6}>
-          <Card chart>
             
-            <CardBody>
-            <h4 className={classes.cardTitle}>Total Steps</h4>
-            <h3 className={classes.cardTitle}>Dream Mile X Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h3>
-              <p className={classes.cardCategory}>
-                
-                {_.maxBy(_.find(data, {challenge:challenge}).users, 'totalSteps').name}
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-              {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalSteps').totalSteps)}
-              </div>
-            </CardFooter>
           </Card>
         </GridItem>
         
-      </GridContainer>
+        
+      
       ))}
+      </GridContainer>
         </div>
       </Parallax>
       {challenges.map(challenge => (
@@ -137,30 +127,15 @@ export default function Index() {
          
        <GridItem xs={12} sm={12} md={12}>
           <Card>
-          <CardHeader color="info">
-            <h4 className={classes.cardTitleWhite}>Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h4>
-            <p className={classes.cardCategoryWhite}>
-              Leaderboard
-            </p>
+          <CardHeader color=
+              {challenge.indexOf('M') == -1 ? "info": "success"}>
+            {challenge.indexOf('M') == -1 ? <DirectionsWalkIcon/> : <DirectionsRunIcon/> }<h4 className={classes.cardTitleWhite}>Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h4>
+            
           </CardHeader>
             <CardBody>
               <Table
-                tableHeaderColor="info"
                 tableHead={[ "Name", "Team", "Challenge", "Total Distance (Miles)", "Total Steps", "Average Daily Steps"]}
-                tableData={_.map(_.find(data, {challenge:challenge}).users, function(item) {
-                  const row = [];
-                  const link = `/user/${item.id}`;
-                  row.push(<Link href={link}>
-                      <a>{item.name}</a></Link>);
-                  row.push(item.team);
-                  row.push(item.challenge.replace('M',' Miles').replace('S',' Steps'));
-                  row.push(_.round(item.totalDistance));
-                  row.push(_.round(item.totalSteps));
-                  row.push(_.round(item.averageSteps));
-                  row.push("Running");
-                  // row.push(item.recent);
-                  return row;
-                })}
+                tableData={_.map(_.find(data, {challenge:challenge}).users)}
               />
 
 
@@ -170,7 +145,7 @@ export default function Index() {
         </GridItem>
         </GridContainer>
 ))}
-
+<Footer whiteFont />
     </div>
   );
   

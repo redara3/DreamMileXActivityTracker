@@ -11,7 +11,7 @@ handler.get(async (req, res) => {
   if(req.query.type === 'sync') {
     console.log(req.query);
     const returnResponse = await updateData(req, req.query.fitbit_id);
-    returnResponse.status(200).json(returnResponse);
+    res.status(200).json(returnResponse);
   } else {
   const user = await getUser(req, req.query.fitbit_id);
   res.status(200).json(user);

@@ -92,7 +92,7 @@ export default function LoginPage(props) {
       <Header
         absolute
         color="transparent"
-        brand="Vibha DreamMileX"
+        brand="DreamMile X Tracker Home"
         rightLinks={<HeaderLinks />}
         {...rest}
       />

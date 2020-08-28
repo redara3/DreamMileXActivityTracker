@@ -18,15 +18,14 @@ import HeaderLinks from "../../components/Header/HeaderLinks.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import GridItem from "../../components/Grid/GridItem.js";
 import Parallax from "../../components/Parallax/Parallax.js";
+import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
+import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
+import InfoIcon from '@material-ui/icons/Info';
 import Table from "../../components/Table/Table.js";
 import SnackbarContent from "../../components/Snackbar/SnackbarContent.js";
 import Clearfix from "../../components/Clearfix/Clearfix.js";
 import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
-// @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
-import Schedule from "@material-ui/icons/Schedule";
-import List from "@material-ui/icons/List";
 
 // core components
 import NavPills from "../../components/NavPills/NavPills.js";
@@ -49,11 +48,12 @@ const useStyles = makeStyles(styles);
 
 export default function User() {
   const classes = useStyles();
-
+  const router = useRouter(); 
 
   const onSync = async (e) => {
     const response = await fetch(`/api/user_fitbit/${fitbit_id}?type=sync`);
-      
+    const syncResponseObj = await response.json();
+    
   }
 
   const { query } = useRouter()
@@ -75,7 +75,7 @@ export default function User() {
     <div>
       <Header
         color="transparent"
-        brand="Vibha DreamMileX"
+        brand="DreamMile X Tracker Home"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -95,6 +95,26 @@ export default function User() {
       color="success"
       icon={Check}
     />: ''}
+   {query.action === 'sync' &&  query.status === 'success'? <SnackbarContent
+        message={
+          <span>
+            <b>SUCCESS</b> You have successfully synced your activity data
+          </span>
+        }
+        close
+        color="success"
+        icon={Check}
+      /> : query.action === 'sync' &&  query.status === 'failure' ?
+      
+      <SnackbarContent
+        message={
+          <span>
+            <b>WARNING </b> Failed to sync your data. You could revoke and link again.
+          </span>
+        }
+        close
+        color="warning"
+        icon={Warning}/> : <div/>}
       <Clearfix/>
       
       <GridContainer>
@@ -110,25 +130,27 @@ export default function User() {
                 tabs={[
                   {
                     tabButton: "Information",
-                    tabIcon: Dashboard,
+                    tabIcon: InfoIcon,
                     tabContent: (
                       <Card>
-                      <CardHeader color="info">
-                        <ul>
+                      
+                     <CardBody>
+                     <ul>
                           <li>Name: {data.displayName}</li>
                           <li>Team Name: {data.teamName}</li>
-                          <li>Chalenge Type: {data.challengeType}</li>
+                          <li>Challenge Type: {data.challengeType.replace('M',' Miles').replace('S',' Steps')}</li>
                         </ul>
-                     </CardHeader>
+                     </CardBody>
                      </Card> 
                     )
                   },
                   {
                     tabButton: "Distance",
-                    tabIcon: Schedule,
+                    tabIcon: DirectionsRunIcon,
                     tabContent: (
                       <Card>
-            <CardHeader color="info">
+            
+            <CardBody>
             <ChartistGraph
                 className="ct-chart"
                 data={distanceData}
@@ -136,10 +158,6 @@ export default function User() {
                 options={dailyDistanceChart.options}
                 listener={dailyDistanceChart.animation}
               />
-            </CardHeader>
-            <CardBody color="success">
-            <h4 className={classes.cardTitle}>Daily Distance</h4>
-              <p className={classes.cardCategory}>Performance</p>
             </CardBody>
             
           </Card>
@@ -147,21 +165,18 @@ export default function User() {
                   },
                   {
                     tabButton: "Steps",
-                    tabIcon: List,
+                    tabIcon: DirectionsWalkIcon,
                     tabContent: (
                       <Card>
-            <CardHeader color="info">
-              <ChartistGraph
+           
+            <CardBody>
+            <ChartistGraph
                 className="ct-chart"
                 data={stepsData}
                 type="Bar"
                 options={dailyStepsChart.options}
                 listener={dailyStepsChart.animation}
               />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Daily Steps</h4>
-              <p className={classes.cardCategory}>Performance</p>
             </CardBody>
             
           </Card>

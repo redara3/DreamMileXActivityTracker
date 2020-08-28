@@ -17,12 +17,8 @@ handler.get(async (req, res) => {
   if(req.query.type === 'revoke') {
     console.log(req.query);
     const returnResponse = await revokeAccess(req, req.query.fitbit_id);
-
-    // const returnResponse = await revokeAccess(db, req.query.access_token, req.query.refresh_token, req.query.fitbit_id);
     res.status(200).json(returnResponse)
   } else {
-    console.log(req.query.code);
-    console.log(req.query.state);
     const response = await getaccessTokenFromCode(req.query.code, req.query.state, db);
     res.writeHead(307, {Location: `/user/${response.fitbit_id}?action=${response.action}`});                    // <- redirect
     res.end();
@@ -110,41 +106,13 @@ response = await fetch(`https://api.fitbit.com/1/user/-/activities/recent.json`,
   _.mapKeys(stepsJson, function(value, key){
     return _.replace(key, "-","_")
   })
-  const dbDocument = _.merge( userJson, distanceJson, stepsJson, recent);
+  const dbDocument = _.merge( userJson, distanceJson, stepsJson, {recent: recent});
   db.collection("data").replaceOne({"user.fitbit_id": fitbitId}, dbDocument, { upsert: true }, function(err, res) {
     if (err) throw err;
     console.log("1 document replaced");
   });
   return {fitbit_id: fitbitId, action: 'link', status: 'success'};
 }
-
-// const revokeAccess = async (db, access_token, refresh_token, fitbit_id) => {
-//   const secret = clientId + ':' + clientSecret;
-//    await fetch(`https://api.fitbit.com/oauth2/revoke?token=${access_token}`, {
-//     method: 'POST',
-    
-//     headers: {
-//       'Authorization': `Basic ${btoa(secret)}`,
-//       'Content-Type': 'application/x-www-form-urlencoded'
-//     }
-//   });
-  
-//   await fetch(`https://api.fitbit.com/oauth2/revoke?token=${refresh_token}`, {
-//     method: 'POST',
-    
-//     headers: {
-//       'Authorization': `Basic ${btoa(secret)}`,
-//       'Content-Type': 'application/x-www-form-urlencoded'
-//     }
-//   });
-//   db.collection("data").deleteOne({"user.fitbit_id": fitbit_id}, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document deleted");
-//   });
-//   return {fitbit_id: fitbit_id, action: 'revoke', status: 'success'};
-  
-// }
-
 
 
 

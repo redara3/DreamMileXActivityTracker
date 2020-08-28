@@ -7,6 +7,7 @@ import {
 } from "../../nextjs-material-kit.js";
 
 const landingPageStyle = {
+  
   container: {
     zIndex: "12",
     color: "#FFFFFF",
