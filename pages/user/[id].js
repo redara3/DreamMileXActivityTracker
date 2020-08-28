@@ -13,6 +13,7 @@ import Link from 'next/link';
 
 import ChartistGraph from "react-chartist";
 import Button from "../../components/CustomButtons/Button.js";
+import Badge from "../../components/Badge/Badge.js";
 import Header from "../../components/Header/Header.js";
 import HeaderLinks from "../../components/Header/HeaderLinks.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
@@ -26,7 +27,7 @@ import SnackbarContent from "../../components/Snackbar/SnackbarContent.js";
 import Clearfix from "../../components/Clearfix/Clearfix.js";
 import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
-
+import moment from 'moment'
 // core components
 import NavPills from "../../components/NavPills/NavPills.js";
 import { makeStyles } from "@material-ui/core/styles";
@@ -51,10 +52,12 @@ export default function User() {
   const classes = useStyles();
   const router = useRouter(); 
   const [baseDate, setBaseDate] = useState('2020-08-23');
+  const [syncStatus, setSyncStatus] = useState('');
   const onSync = async (e) => {
+    e.preventDefault();
     const response = await fetch(`/api/user_fitbit/${fitbit_id}?type=sync&baseDate=${baseDate}`);
     const syncResponseObj = await response.json();
-    
+    setSyncStatus(syncResponseObj.status);
   }
 
   const { query } = useRouter()
@@ -76,7 +79,7 @@ export default function User() {
     <div>
       <Header
         color="transparent"
-        brand="DreamMile X Tracker Home"
+        brand="Home"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -96,7 +99,7 @@ export default function User() {
       color="success"
       icon={Check}
     />: ''}
-   {query.action === 'sync' &&  query.status === 'success'? <SnackbarContent
+   {syncStatus === 'success'? <SnackbarContent
         message={
           <span>
             <b>SUCCESS</b> You have successfully synced your activity data
@@ -105,7 +108,7 @@ export default function User() {
         close
         color="success"
         icon={Check}
-      /> : query.action === 'sync' &&  query.status === 'failure' ?
+      /> : syncStatus === 'failure' ?
       
       <SnackbarContent
         message={
@@ -135,10 +138,11 @@ export default function User() {
           className: classes.dateWhite
         }}
       />
-      
+     
             <Button round color='info' onClick={onSync}>
-                Sync Now
+                Sync Now 
               </Button>
+              <Badge color="success">Last Updated: {data.lastUpdated ? moment(data.lastUpdated).fromNow() : 'No update'}</Badge>
             </GridItem>
             <GridItem xs={12} sm={12} md={12} lg={12}>
               <Card>

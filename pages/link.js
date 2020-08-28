@@ -92,7 +92,7 @@ export default function LoginPage(props) {
       <Header
         absolute
         color="transparent"
-        brand="DreamMile X Tracker Home"
+        brand="Home"
         rightLinks={<HeaderLinks />}
         {...rest}
       />

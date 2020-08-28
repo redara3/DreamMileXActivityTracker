@@ -56,7 +56,7 @@ export default function Index() {
     <div>
       <Header
         color="transparent"
-        brand="DreamMile X Tracker Home"
+        brand="Tracker"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{

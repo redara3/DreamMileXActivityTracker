@@ -254,7 +254,10 @@ const signupPageStyle = {
   },
   switchRoot: {
     height: "48px"
-  }
+  },
+  linkWhite: {
+    color: "#FFFFFF",
+  },
 };
 
 export default signupPageStyle;

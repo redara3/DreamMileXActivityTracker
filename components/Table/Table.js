@@ -43,9 +43,9 @@ function Row(props) {
   console.log(numStepsOrDistanceChallenge);
   let icon = 'Do not know!';
   if(numStepsOrDistanceChallenge.length > 4) {
-    icon = parseInt(_.round(row.averageSteps)) > parseInt(numStepsOrDistanceChallenge) ? 'On Track!' : 'Keep going!'
+    icon = Math.abs(_.round(row.averageSteps) - parseInt(numStepsOrDistanceChallenge)) > 0 ? 'On Track!' : 'Keep going!'
   } else {
-    icon = parseInt(_.round(row.totalDistance/row.numDays) * 30) > parseInt(numStepsOrDistanceChallenge) ? 'On Track!' : 'Keep going!'
+    icon = Math.abs(_.round(row.totalDistance) - parseInt(numStepsOrDistanceChallenge)) > 0 ? 'On Track!' : 'Keep going!'
   }
   
   return (
