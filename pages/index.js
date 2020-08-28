@@ -29,6 +29,7 @@ import Badge from "../components/Badge/Badge.js";
 import Link from 'next/link';
 
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import StarRateIcon from '@material-ui/icons/StarRate';
 import _ from 'lodash'
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
@@ -108,9 +109,10 @@ export default function Index() {
       color="warning"
       icon={Warning}/> : <div/>}
       <Clearfix/>
+      <div className={classes.container}>
       <GridContainer>
       {challenges.map(challenge => (
-        <GridItem xs={12} sm={12} md={6}>
+        <GridItem xs={6} sm={6} md={3}>
           <Card chart>
             <CardHeader color=
               {challenge.indexOf('M') == -1 ? "info": "success"}>
@@ -119,7 +121,7 @@ export default function Index() {
             </CardHeader>
             <CardBody >
                <p className={classes.cardCategory}>
-                
+           
                 <Badge color={challenge.indexOf('M') == -1 ? "info": "success"}>Leader: {_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').name}</Badge>
                 <br/>Total Distance: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance)} Miles
                 <br/>Average Daily Steps: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').averageSteps)}
@@ -134,6 +136,7 @@ export default function Index() {
       
       ))}
       </GridContainer>
+      </div>
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
@@ -144,12 +147,12 @@ export default function Index() {
           <Card>
           <CardHeader color=
               {challenge.indexOf('M') == -1 ? "info": "success"}>
-            {challenge.indexOf('M') == -1 ? <DirectionsWalkIcon/> : <DirectionsRunIcon/> }<h4 className={classes.cardTitleWhite}>Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h4>
+            {challenge.indexOf('M') == -1 ? <DirectionsWalkIcon/> : <DirectionsRunIcon/> }<h4 className={classes.cardTitle}>Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h4>
             
           </CardHeader>
             <CardBody>
               <Table tableHeaderColor={challenge.indexOf('M') == -1 ? "info": "success"}
-                tableHead={[ "Rank", "Name", "Team", "Challenge", "Distance (Miles)", "Past Days", "Average Daily Steps", "Progress", "Last Updated"]}
+                tableHead={[ "Rank", "Name", "Team", "Challenge", "Distance (Miles)", "Past Days", "Average Steps", "Progress", "Last Updated"]}
                 tableData={_.map(_.find(data, {challenge:challenge}).users)}
               />
 

@@ -41,14 +41,16 @@ import {
     },
     tableHeadCellInfo: {
       color: infoColor,
-      ...defaultFont,
+
+      fontWeight: "bold",
       "&, &$tableCell": {
         fontSize: "1.1em"
       }
     },
     tableHeadCellSuccess: {
       color: successColor,
-      ...defaultFont,
+
+      fontWeight: "bold",
       "&, &$tableCell": {
         fontSize: "1.1em"
       }
@@ -82,10 +84,14 @@ import {
     linkInfo: {
       textDecoration: "none",
       color: infoColor,
+      fontSize: "1.1em",
+      fontWeight: "bold"
     },
     linkSuccess: {
       textDecoration: "none",
+      fontSize: "1.1em",
       color: successColor,
+      fontWeight: "bold"
     }
   });
   

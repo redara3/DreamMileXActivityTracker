@@ -39,13 +39,13 @@ function Row(props) {
   const classes = useStyles();
   const link = `/user/${row.id}`;
   const challengeType = row.challenge;
-  const numStepsOrDistanceChallenge = challengeType.substring(challengeType.length-1); 
+  const numStepsOrDistanceChallenge = row.challenge.replace('M','').replace('S',''); 
   console.log(numStepsOrDistanceChallenge);
   let icon = 'Do not know!';
-  if(numStepsOrDistanceChallenge.length > 4) {
-    icon = Math.abs(_.round(row.averageSteps) - parseInt(numStepsOrDistanceChallenge)) > 0 ? 'On Track!' : 'Keep going!'
+  if(_.size(numStepsOrDistanceChallenge) > 3) {
+    icon = parseInt(_.round(row.averageSteps)) > parseInt(numStepsOrDistanceChallenge) ? 'On Track!' : 'Keep going!'
   } else {
-    icon = Math.abs(_.round(row.totalDistance) - parseInt(numStepsOrDistanceChallenge)) > 0 ? 'On Track!' : 'Keep going!'
+    icon = parseInt(_.round(row.totalDistance/(row.numDays) * 30)) > parseInt(numStepsOrDistanceChallenge) ? 'On Track!' : 'Keep going!'
   }
   
   return (
@@ -66,7 +66,7 @@ function Row(props) {
         <TableCell className={classes.tableCell}>{_.round(row.totalDistance)}</TableCell>
         <TableCell className={classes.tableCell}>{_.round(row.numDays)}</TableCell>
         <TableCell className={classes.tableCell}>{_.round(row.averageSteps)}</TableCell>
-        <TableCell className={classes.tableCell}><Badge color={tableHeaderColor}>{icon}</Badge></TableCell>
+        <TableCell className={classes.tableCell}><Badge color={icon === 'Keep going!' ? "warning" : tableHeaderColor}>{icon}</Badge></TableCell>
         <TableCell className={classes.tableCell}>{row.lastUpdated ? moment(row.lastUpdated).fromNow() : 'No update'}</TableCell>
       </TableRow>
       <TableRow>

@@ -54,22 +54,7 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
   let baseDate = JSON.parse(state).baseDate;
   
   const endDate = moment(new Date()).format('YYYY-MM-DD');
-  // await fetch(`https://api.fitbit.com/1/user/-/activities/apiSubscriptions/${fitbitId}.json`, {
-  //   method: "POST",
-  //   headers: {
-  //       "Authorization": `Bearer ${accessToken}`
-  //   }
-  // }).catch(e => e);
-
   
-
-  // db.collection("users").replaceOne({
-      
-  //   "user.fitbit_id": fitbitId,
-  // }, userJson, { upsert: true }, function(err, res) {
-  //   if (err) throw err;
-  //   console.log("1 document replaced");
-  // });
 
  let response = await fetch(`https://api.fitbit.com/1/user/-/activities/distance/date/${baseDate}/${endDate}.json`, {
     

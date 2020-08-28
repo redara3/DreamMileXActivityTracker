@@ -86,13 +86,13 @@ const landingPageStyle = {
     color: grayColor[2],
     marginTop: "0px",
     minHeight: "auto",
-    fontWeight: "300",
+    fontWeight: "bold",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
     textDecoration: "none",
     "& small": {
       color: grayColor[1],
-      fontWeight: "400",
+      fontWeight: "bold",
       lineHeight: "1"
     }
   },
