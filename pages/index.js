@@ -25,11 +25,9 @@ import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 import Footer from "../components/Footer/Footer.js";
 
 import Badge from "../components/Badge/Badge.js";
+import Error from "../components/ErrorComponents/ComponentError.js";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Link from 'next/link';
-
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import StarRateIcon from '@material-ui/icons/StarRate';
 import _ from 'lodash'
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
@@ -48,8 +46,12 @@ export default function Index() {
   const { query } = useRouter()
   const { data, error } = useSWR('/api/user_activity', fetcher)
 
-  if (error) return <div>Failed to load</div>
-  if (!data) return <div>Loading...</div>
+  if (error) return <div><Error
+  title="An error occured loading users data"
+  subtitle={error.response ? error.response.statusText : ''}
+/></div>
+  if (!data) return <div><CircularProgress />
+  </div>
   
   const challenges = _.map(data, 'challenge');
 
@@ -116,7 +118,7 @@ export default function Index() {
           <Card chart>
             <CardHeader color=
               {challenge.indexOf('M') == -1 ? "info": "success"}>
-              {challenge.indexOf('M') == -1 ? <DirectionsWalkIcon/> : <DirectionsRunIcon/> } <h3 className={classes.cardTitle}>Dream Mile X Challenge: {challenge.replace('M',' Miles').replace('S',' Steps')}</h3>
+              {challenge.indexOf('M') == -1 ? <DirectionsWalkIcon/> : <DirectionsRunIcon/> } <h3 className={classes.cardTitle}>{challenge.replace('M',' Miles').replace('S',' Steps')}</h3>
              
             </CardHeader>
             <CardBody >

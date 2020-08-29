@@ -38,9 +38,7 @@ function Row(props) {
   
   const classes = useStyles();
   const link = `/user/${row.id}`;
-  const challengeType = row.challenge;
   const numStepsOrDistanceChallenge = row.challenge.replace('M','').replace('S',''); 
-  console.log(numStepsOrDistanceChallenge);
   let icon = 'Do not know!';
   if(_.size(numStepsOrDistanceChallenge) > 3) {
     icon = parseInt(_.round(row.averageSteps)) > parseInt(numStepsOrDistanceChallenge) ? 'On Track!' : 'Keep going!'
@@ -58,7 +56,7 @@ function Row(props) {
         </TableCell>
         <TableCell><Badge color={tableHeaderColor}>{index}</Badge></TableCell>
         <TableCell className={classes.tableCell} component="th" scope="row">
-        {<Link href={link}>
+        {<Link href={link} prefetch>
                       <a className={tableHeaderColor=='info' ? classes.linkInfo: classes.linkSuccess}>{row.name}</a></Link>}
         </TableCell>
         <TableCell className={classes.tableCell}>{row.team}</TableCell>

@@ -5,6 +5,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../components/theme';
+import NProgress from '../components/nprogress';
+
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -21,16 +23,14 @@ export default function MyApp(props) {
     <React.Fragment>
       <Head>
         <title>DreamMile X Tracker</title>
-        <link
-          rel="stylesheet"
-          href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css"
-        />
+        
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Component {...pageProps} />
+        <NProgress />
       </ThemeProvider>
     </React.Fragment>
   );

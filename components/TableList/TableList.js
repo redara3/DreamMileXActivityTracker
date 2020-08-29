@@ -26,13 +26,13 @@ const styles = {
     color: "#FFFFFF",
     marginTop: "0px",
     minHeight: "auto",
-    fontWeight: "300",
+    fontWeight: "bold",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
     textDecoration: "none",
     "& small": {
       color: "#777",
-      fontSize: "65%",
+      fontSize: "80%",
       fontWeight: "400",
       lineHeight: "1"
     }
