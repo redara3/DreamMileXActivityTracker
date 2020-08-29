@@ -21,20 +21,14 @@ import CardFooter from "../components/Card/CardFooter.js";
 import CustomInput from "../components/CustomInput/CustomInput.js";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-// @material-ui/icons
-import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
 
 import styles from "../components/jss/nextjs-material-kit/pages/loginPage.js";
-import Box from "@material-ui/core/Box";
-import Select from "@material-ui/core/Select";
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
+
 import CustomDropdown from "../components/CustomDropdown/CustomDropdown.js";
 import Checkbox from "@material-ui/core/Checkbox";
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
-import { TextField } from '@material-ui/core';
+
 
 const useStyles = makeStyles(styles);
 

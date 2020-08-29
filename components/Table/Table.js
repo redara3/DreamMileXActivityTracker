@@ -49,23 +49,26 @@ function Row(props) {
   return (
     <React.Fragment>
       <TableRow className={classes.tableHeadRow}>
-        <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
+        
         <TableCell><Badge color={tableHeaderColor}>{index}</Badge></TableCell>
         <TableCell className={classes.tableCell} component="th" scope="row">
         {<Link href={link} prefetch>
                       <a className={tableHeaderColor=='info' ? classes.linkInfo: classes.linkSuccess}>{row.name}</a></Link>}
         </TableCell>
         <TableCell className={classes.tableCell}>{row.team}</TableCell>
-        <TableCell className={classes.tableCell}>{row.challenge.replace('M',' Miles').replace('S',' Steps')}</TableCell>
         <TableCell className={classes.tableCell}>{_.round(row.totalDistance)}</TableCell>
-        <TableCell className={classes.tableCell}>{_.round(row.numDays)}</TableCell>
+        
         <TableCell className={classes.tableCell}>{_.round(row.averageSteps)}</TableCell>
         <TableCell className={classes.tableCell}><Badge color={icon === 'Keep going!' ? "warning" : tableHeaderColor}>{icon}</Badge></TableCell>
         <TableCell className={classes.tableCell}>{row.lastUpdated ? moment(row.lastUpdated).fromNow() : 'No update'}</TableCell>
+        <TableCell className={classes.tableCell}>{_.round(row.numDays)}</TableCell>
+        <TableCell className={classes.tableCell}>{row.challenge.replace('M',' Miles').replace('S',' Steps')}</TableCell>
+        
+        <TableCell>
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -74,7 +77,7 @@ function Row(props) {
               <Typography className={classes.tableCell} gutterBottom component="div">
                 Recent Activity
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell className={classes.tableCell}>Name</TableCell>
@@ -111,7 +114,8 @@ export default function CollapsibleTable(props) {
       <Table aria-label="collapsible table">
          <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
         <TableRow className={classes.tableHeadRow}>
-             <TableCell />
+             
+               
                {tableHead.map((prop, key) => {
                 return (
                   <TableCell
@@ -122,6 +126,7 @@ export default function CollapsibleTable(props) {
                   </TableCell>
                 );
               })}
+              
              </TableRow>
         </TableHead>
         <TableBody>

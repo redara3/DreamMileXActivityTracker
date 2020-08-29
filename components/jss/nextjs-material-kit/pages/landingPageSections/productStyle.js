@@ -1,4 +1,4 @@
-import { title } from "assets/jss/nextjs-material-kit.js";
+import { title } from "../../../nextjs-material-kit.js";
 
 const productStyle = {
   section: {
@@ -6,15 +6,19 @@ const productStyle = {
     textAlign: "center"
   },
   title: {
-    ...title,
+    color: "#FFFFFF",
     marginBottom: "1rem",
     marginTop: "30px",
     minHeight: "32px",
     textDecoration: "none"
   },
   description: {
-    color: "#999"
-  }
+    color: "#FFFFFF"
+  },
+  linkWhite: {
+    color: "#FFFFFF",
+  },
+  
 };
 
 export default productStyle;

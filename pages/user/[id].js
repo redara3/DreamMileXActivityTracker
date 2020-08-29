@@ -34,14 +34,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import useSWR from 'swr';
 import { useRouter } from 'next/router'
 import _ from 'lodash';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CustomLinearProgress from "../../components/CustomLinearProgress/CustomLinearProgress.js";
 import {
   dailyStepsChart,
   dailyDistanceChart
 } from "../../lib/charts.js";
 
-
-import Error from "../../components/ErrorComponents/ComponentError.js";
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 
@@ -66,11 +64,33 @@ export default function User() {
   const { query } = useRouter()
   const { data, error } = useSWR(`/api/user_fitbit/${query.id}`, fetcher)
 
-  if (error) return <div><Error
-  title="An error occured loading users data"
-  subtitle={error.response ? error.response.statusText : ''}
-/></div>
-  if (!data) return <div><CircularProgress /></div>
+  if (error) return <div>
+<SnackbarContent
+        message={
+          <span>
+            Failed to load data for the user. Please try again.
+          </span>
+        }
+        close
+        color="warning"
+      />
+</div>
+  if (!data) return <div><CustomLinearProgress
+  variant="determinate"
+  color="info"
+  value={100}
+  style={{ width: "35%", display: "inline-block" }}
+/>
+  <SnackbarContent
+        message={
+          <span>
+            Loading Activity Data for the selected user. Please wait ...
+          </span>
+        }
+        close
+        color="info"
+      />
+</div>
   const fitbit_id = data.fitbit_id;
   const stepsData = {
     labels: !_.isEmpty(data.activities_steps) && data.activities_steps.length > 0 ? (data.activities_steps.map(_.values).slice(-10)):[],

@@ -46,15 +46,15 @@ const infoStyle = {
     height: "36px"
   },
   descriptionWrapper: {
-    color: grayColor,
+    color: successColor,
     overflow: "hidden"
   },
   title,
   description: {
-    color: grayColor,
+    color: successColor,
     overflow: "hidden",
     marginTop: "0px",
-    fontSize: "14px"
+    fontSize: "18px"
   },
   iconWrapperVertical: {
     float: "none"

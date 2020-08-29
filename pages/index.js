@@ -19,14 +19,12 @@ import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
 import { makeStyles } from "@material-ui/core/styles";
 
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 import Footer from "../components/Footer/Footer.js";
 
 import Badge from "../components/Badge/Badge.js";
-import Error from "../components/ErrorComponents/ComponentError.js";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CustomLinearProgress from "../components/CustomLinearProgress/CustomLinearProgress.js";
 
 import _ from 'lodash'
 import useSWR from 'swr';
@@ -46,11 +44,32 @@ export default function Index() {
   const { query } = useRouter()
   const { data, error } = useSWR('/api/user_activity', fetcher)
 
-  if (error) return <div><Error
-  title="An error occured loading users data"
-  subtitle={error.response ? error.response.statusText : ''}
-/></div>
-  if (!data) return <div><CircularProgress />
+  if (error) return <div>
+<SnackbarContent
+        message={
+          <span>
+            Failed to load data for all users. Please try again.
+          </span>
+        }
+        close
+        color="warning"
+      />
+</div>
+  if (!data) return <div> <CustomLinearProgress
+  variant="determinate"
+  color="info"
+  value={100}
+  style={{ width: "35%", display: "inline-block" }}
+/>
+<SnackbarContent
+        message={
+          <span>
+            Loading Activity Data for all Dream Mile X Participants. Please wait...
+          </span>
+        }
+        color="info"
+      />
+
   </div>
   
   const challenges = _.map(data, 'challenge');
@@ -154,7 +173,7 @@ export default function Index() {
           </CardHeader>
             <CardBody>
               <Table tableHeaderColor={challenge.indexOf('M') == -1 ? "info": "success"}
-                tableHead={[ "Rank", "Name", "Team", "Challenge", "Distance (Miles)", "Past Days", "Average Steps", "Progress", "Last Updated"]}
+                tableHead={[ "Rank", "Name", "Team", "Distance (Miles)", "Average Steps", "Progress", "Last Updated", "Past Days", "Challenge", "Recent"]}
                 tableData={_.map(_.find(data, {challenge:challenge}).users)}
               />
 
