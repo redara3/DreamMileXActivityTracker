@@ -59,7 +59,8 @@ const getProfile = async (accessToken, refreshToken, state, fitbitId, db) => {
  let response = await fetch(`https://api.fitbit.com/1/user/-/activities/distance/date/${baseDate}/${endDate}.json`, {
     
     headers: {
-      'Authorization': `Bearer ${accessToken}`
+      'Authorization': `Bearer ${accessToken}`,
+      'Accept-Language': 'en_US'
     }
   });
   const distanceJson = await response.json(); //extract JSON from the http response

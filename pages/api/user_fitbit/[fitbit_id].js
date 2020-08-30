@@ -1,6 +1,6 @@
 import nextConnect from 'next-connect';
 import middleware from '../../../middlewares/middleware';
-import { getUser } from '../../../lib/db';
+import { getUserActivity } from '../../../lib/db';
 import { updateData } from '../../../lib/fitbit';
 
 const handler = nextConnect();
@@ -13,7 +13,7 @@ handler.get(async (req, res) => {
     const returnResponse = await updateData(req, req.query.fitbit_id);
     res.status(200).json(returnResponse);
   } else {
-  const user = await getUser(req, req.query.fitbit_id);
+  const user = await getUserActivity(req, req.query.fitbit_id);
   res.status(200).json(user);
   }
 });

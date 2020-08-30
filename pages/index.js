@@ -143,9 +143,10 @@ export default function Index() {
             <CardBody >
                <p className={classes.cardCategory}>
            
-                <Badge color={challenge.indexOf('M') == -1 ? "info": "success"}>Leader: {_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').name}</Badge>
-                <br/>Total Distance: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance)} Miles
-                <br/>Average Daily Steps: {_.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').averageSteps)}
+               <Badge color={challenge.indexOf('M') == -1 ? "info": "success"}>Leader: {_.maxBy(_.find(data, {challenge:challenge}).users, challenge.indexOf('M') == -1 ? 'averageSteps' : 'totalDistance').name}</Badge>
+               <br/><Badge color={challenge.indexOf('M') == -1 ? "info": "success"}> {challenge.indexOf('M') == -1 ? "Average Steps: ": "Distance: "} {challenge.indexOf('S') == -1 ?
+                _.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'totalDistance').totalDistance) : 
+                 _.round(_.maxBy(_.find(data, {challenge:challenge}).users, 'averageSteps').averageSteps)} </Badge>
                 
               </p>
             </CardBody>
