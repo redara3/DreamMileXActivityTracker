@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Card from "../components/Card/Card.js";
 import CardBody from "../components/Card/CardBody.js";
 import CardHeader from "../components/Card/CardHeader.js";
@@ -17,6 +17,8 @@ import Clearfix from "../components/Clearfix/Clearfix.js";
 import Pagination from "../components/Pagination/Pagination.js";
 import Check from "@material-ui/icons/Check";
 import Warning from "@material-ui/icons/Warning";
+
+import Button from "../components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
@@ -40,7 +42,15 @@ const useStyles = makeStyles(styles);
 export default function Index() {
   const classes = useStyles();
   
+  const [baseDate, setBaseDate] = useState('2020-10-01');
+  const [syncStatus, setSyncStatus] = useState('');
 
+  const onSyncAll = async (e) => {
+    e.preventDefault();
+    const response = await fetch(`/api/user_refresh?baseDate=${baseDate}`);
+    const syncResponseObj = await response.json();
+    setSyncStatus(syncResponseObj.status)
+  }
   const { query } = useRouter()
   const { data, error } = useSWR('/api/user_activity', fetcher)
 
@@ -88,6 +98,26 @@ export default function Index() {
       />
       <Parallax filter responsive image={'./images/running-bg.jpg'}>
         <div className={classes.container}>
+        {syncStatus === 'success'? <SnackbarContent
+        message={
+          <span>
+            <b>SUCCESS</b> Successfully synced all users activity data
+          </span>
+        }
+        close
+        color="success"
+        icon={Check}
+      /> : syncStatus === 'failure' ?
+      
+      <SnackbarContent
+        message={
+          <span>
+            <b>WARNING </b> Failed to sync data for all users.
+          </span>
+        }
+        close
+        color="warning"
+        icon={Warning}/> : <div/>}
         {query.action === 'revoke' &&  query.status === 'success'? <SnackbarContent
         message={
           <span>
@@ -131,6 +161,9 @@ export default function Index() {
       icon={Warning}/> : <div/>}
       <Clearfix/>
       <div className={classes.container}>
+      <Button round color='success' onClick={onSyncAll}>
+        Sync All 
+      </Button>
       <GridContainer>
       {challenges.map(challenge => (
         <GridItem xs={6} sm={6} md={3}>
