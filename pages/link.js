@@ -42,7 +42,7 @@ export default function LoginPage(props) {
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('');
   const [challengeType, setChallengeType] = useState('50M');
-  const [baseDate, setBaseDate] = useState('2020-09-01');
+  const [baseDate, setBaseDate] = useState('2020-10-01');
   const [checked, setChecked] = React.useState([ 22]);
   function onSubmit(event) {
     event.preventDefault();
@@ -156,7 +156,7 @@ export default function LoginPage(props) {
                         type: "text",
                         readOnly: true,
                         disabled: true,
-                        value: 'Start Date: 2020-09-01'
+                        value: 'Start Date: 2020-10-01'
                       }}
                     />
                   <CustomDropdown
@@ -172,8 +172,8 @@ export default function LoginPage(props) {
                   hoverColor="info"
                   onClick={handleChallengeChange}
                   dropdownList={[
-                    {select: true, value: "50M", displayLabel:"September 50 Miles"},
-                    {select: true, value: "100M", displayLabel:"September 100 Miles"},
+                    {select: true, value: "50M", displayLabel:"50 Miles"},
+                    {select: true, value: "100M", displayLabel:"100 Miles"},
                     {select: true, value: "5000S", displayLabel:"5,000 Daily Steps Average"},
                     {select: true, value: "10000S", displayLabel:"10,000 Daily Steps Average"},
                     {select: true, value: "15000S", displayLabel:"15,000 Daily Steps Average"},
