@@ -161,9 +161,9 @@ export default function Index() {
       icon={Warning}/> : <div/>}
       <Clearfix/>
       <div className={classes.container}>
-      <Button round color='success' onClick={onSyncAll}>
+      {/* <Button round color='success' onClick={onSyncAll}>
         Sync All 
-      </Button>
+      </Button> */}
       <GridContainer>
       {challenges.map(challenge => (
         <GridItem xs={6} sm={6} md={3}>
