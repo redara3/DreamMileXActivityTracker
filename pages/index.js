@@ -42,7 +42,7 @@ const useStyles = makeStyles(styles);
 export default function Index() {
   const classes = useStyles();
   
-  const [baseDate, setBaseDate] = useState('2020-10-01');
+  const [baseDate, setBaseDate] = useState('2020-11-01');
   const [syncStatus, setSyncStatus] = useState('');
 
   const onSyncAll = async (e) => {
