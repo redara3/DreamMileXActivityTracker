@@ -28,6 +28,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import Paper from '@material-ui/core/Paper';
 
 import Link from 'next/link';
+import _ from 'lodash';
 
 const useStyles = makeStyles(styles);
 
@@ -86,7 +87,7 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.recent.map((activityRow) => (
+                  {_.isArray(row.recent) ? row.recent.map((activityRow) => (
                     <TableRow key={activityRow.activity_id}>
                       <TableCell className={classes.tableCell}component="th" scope="row">
                         {activityRow.name}
@@ -95,7 +96,7 @@ function Row(props) {
                       <TableCell className={classes.tableCell}>{_.round(activityRow.duration/60000)} minutes</TableCell>
                       
                     </TableRow>
-                  ))}
+                  )): ''}
                 </TableBody>
               </Table>
             </Box>
