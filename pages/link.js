@@ -42,7 +42,7 @@ export default function LoginPage(props) {
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('');
   const [challengeType, setChallengeType] = useState('50M');
-  const [baseDate, setBaseDate] = useState('2020-11-01');
+  const [baseDate, setBaseDate] = useState('2020-12-01');
   const [checked, setChecked] = React.useState([ 22]);
   function onSubmit(event) {
     event.preventDefault();

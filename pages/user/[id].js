@@ -52,7 +52,7 @@ const useStyles = makeStyles(styles);
 export default function User() {
   const classes = useStyles();
   const router = useRouter(); 
-  const [baseDate, setBaseDate] = useState('2020-11-01');
+  const [baseDate, setBaseDate] = useState('2020-12-01');
   const [syncStatus, setSyncStatus] = useState('');
   const onSync = async (e) => {
     e.preventDefault();
