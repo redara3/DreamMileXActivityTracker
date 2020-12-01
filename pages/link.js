@@ -156,7 +156,7 @@ export default function LoginPage(props) {
                         type: "text",
                         readOnly: true,
                         disabled: true,
-                        value: 'Start Date: 2020-11-01'
+                        value: 'Start Date: 2020-12-01'
                       }}
                     />
                   <CustomDropdown

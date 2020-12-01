@@ -153,7 +153,7 @@ export default function User() {
         id="baseDate"
         label="Start Date"
         type="date"
-        defaultValue="2020-11-01"
+        defaultValue="2020-12-01"
         inputProps={{
           readOnly: true,
           disabled: true,
