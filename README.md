@@ -1,42 +1,6 @@
-# Basic API routes example
+# DreamMileActivityTracker
 
-Next.js ships with [API routes](https://nextjs.org/docs/api-routes/introduction) which provides an easy solution to build your own `API`. This example shows how to create multiple `API` endpoints with serverless functions, which can execute independently.
+This tracker project is intended to help create a rankings system for one of Vibha's biggest fundraising events of the year, the Vibha Dream Mile. The Vibha Dream Mile is an event in September where people register for a race near the Atlanta area. However, in 2020, due to the Covid pandemic, that wasn't feasible. So, instead Vibha did a month long challenge where attendees have to meet month long goals of 50 miles, 100 miles, 5,000 steps/day, etc. In order to allow others to compete together, this tracker app allows participants to connect their fitbits and track their steps and allows for a ranking system to show the leaders in all the categories. 
 
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/vercel/next.js/tree/canary/examples/api-routes)
-
-## How to use
-
-### Using `create-next-app`
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example api-routes api-routes-app
-# or
-yarn create next-app --example api-routes api-routes-app
-```
-
-### Download manually
-
-Download the example:
-
-```bash
-curl https://codeload.github.com/vercel/next.js/tar.gz/canary | tar -xz --strip=2 next.js-canary/examples/api-routes
-cd api-routes
-```
-
-Install it and run:
-
-```bash
-npm install
-npm run dev
-# or
-yarn
-yarn dev
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/import?filter=next.js&utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Link:
+https://dream-mile-x-activity-tracker.vercel.app
