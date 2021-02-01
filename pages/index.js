@@ -42,7 +42,7 @@ const useStyles = makeStyles(styles);
 export default function Index() {
   const classes = useStyles();
   
-  const [baseDate, setBaseDate] = useState('2021-01-01');
+  const [baseDate, setBaseDate] = useState('2021-02-01');
   const [syncStatus, setSyncStatus] = useState('');
 
   const onSyncAll = async (e) => {
@@ -162,7 +162,7 @@ export default function Index() {
       <Clearfix/>
       <div className={classes.container}>
       <Button round color='success' onClick={onSyncAll}>
-        Sync All - January 2021
+        Sync All - February 2021
       </Button>
       <GridContainer>
       {challenges.map(challenge => (

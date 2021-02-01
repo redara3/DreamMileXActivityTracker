@@ -42,7 +42,7 @@ export default function LoginPage(props) {
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('');
   const [challengeType, setChallengeType] = useState('50M');
-  const [baseDate, setBaseDate] = useState('2021-01-01');
+  const [baseDate, setBaseDate] = useState('2021-02-01');
   const [checked, setChecked] = React.useState([ 22]);
   function onSubmit(event) {
     event.preventDefault();
@@ -156,7 +156,7 @@ export default function LoginPage(props) {
                         type: "text",
                         readOnly: true,
                         disabled: true,
-                        value: 'Start Date: 2021-01-01'
+                        value: 'Start Date: 2021-02-01'
                       }}
                     />
                   <CustomDropdown
