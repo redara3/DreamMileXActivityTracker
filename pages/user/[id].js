@@ -52,7 +52,7 @@ const useStyles = makeStyles(styles);
 export default function User() {
   const classes = useStyles();
   const router = useRouter(); 
-  const [baseDate, setBaseDate] = useState('2021-03-01');
+  const [baseDate, setBaseDate] = useState('2021-10-01');
   const [syncStatus, setSyncStatus] = useState('');
   const onSync = async (e) => {
     e.preventDefault();
@@ -153,7 +153,7 @@ export default function User() {
         id="baseDate"
         label="Start Date"
         type="date"
-        defaultValue="2021-03-01"
+        defaultValue="2021-10-01"
         inputProps={{
           readOnly: true,
           disabled: true,
